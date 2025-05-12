@@ -1,0 +1,29 @@
+  
+.shape {
+    display: grid;
+    justify-content: center;  /* Center horizontally */
+    align-items: center;      /* Center vertically (within available height) */
+}
+
+.row {
+    display: flex;
+  }
+  
+.is-colored-cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid red;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-colored-cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

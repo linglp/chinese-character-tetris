@@ -1,11 +1,26 @@
-export function Welcome() {
+import StartGameButton from "../components/StartGameButton";
+
+
+// Define the type for the props
+type WeclomeProp = {
+  onUpdate: (value: number[][]) => void;
+}
+
+const Welcome: React.FC<WeclomeProp> = ({ onUpdate }) => {
+  const disabled = false
+
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <header className="flex flex-col items-center gap-9">
-          <div className="w-[500px] max-w-[100vw] p-4">
+        <header className="flex flex-col items-start gap-5 w-[500px] max-w-[100vw] p-4">
+          <div>
             Welcome to tetris!
           </div>
+
+          <div>
+            <StartGameButton disabled={disabled} onUpdate={onUpdate} />
+          </div>
+
         </header>
       </div>
     </main>
@@ -53,3 +68,5 @@ const resources = [
     ),
   },
 ];
+
+export default Welcome
