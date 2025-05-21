@@ -2,11 +2,11 @@ import StartGameButton from "../components/StartGameButton";
 
 
 // Define the type for the props
-type WeclomeProp = {
+type WelcomeProp = {
   onUpdate: (value: number[][]) => void;
 }
 
-const Welcome: React.FC<WeclomeProp> = ({ onUpdate }) => {
+const Welcome: React.FC<WelcomeProp> = ({ onUpdate }) => {
   const disabled = false
 
   return (

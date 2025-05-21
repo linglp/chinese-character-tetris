@@ -9,10 +9,8 @@ type StartButtonProps = {
 
 const StartGameButton: React.FC<StartButtonProps> = ({ disabled, onUpdate }) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      console.log("Button clicked!");
-      //generate a random shape
-      var shape = randomShapeGenerator();
-      onUpdate(shape);
+    var shape = randomShapeGenerator();
+    onUpdate(shape);
     };
 
     return (

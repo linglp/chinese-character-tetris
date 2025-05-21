@@ -1,0 +1,16 @@
+.main-container {
+    position: relative;
+    background: #eee;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.shape-container{
+  position: absolute;
+  top: 0px;                /* place near the top of the cell */
+  left: 50%;               /* move to center horizontally */
+  transform: translateX(-50%); /* shift back by half its width */
+  max-width: 900px;
+}
