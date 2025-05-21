@@ -2,11 +2,8 @@ import { useState } from 'react';
 import type { Route } from "./+types/home";
 import  Welcome  from "../welcome/welcome";
 import Board from "../components/Board";
-import Shape from "../components/Shape";
-import StartGame from "../components/StartGameButton"
-import {createLShape} from "../components/Shape/util"
 import MoveShape from "../components/MoveShape"
-
+import './home.scss';
 
 
 export function meta({}: Route.MetaArgs) {
@@ -24,18 +21,22 @@ const createBoard = () => {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 };
 
-const board = createBoard()
-const shape = createLShape()
+const initBoard = createBoard()
 
 export default function Home() {
   const [randomShape, setShape] = useState<number[][]>([]);
+  const [board, setBoard] = useState<number[][]>(initBoard);
 
   return (
   <div>
       <Welcome onUpdate={setShape}/>
-      <MoveShape shape={ randomShape } />
-      {/* <Board board={ board } /> */}
-  </div>
+      <div className="main-container">
+        <div className="shape-container">
+        {randomShape.length > 0 && (<MoveShape shape={randomShape} setBoard={setBoard} board={board} />)}
+        </div>
 
+        <Board board={ board } />
+      </div>
+  </div>
   );
 }
