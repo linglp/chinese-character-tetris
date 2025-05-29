@@ -32,7 +32,7 @@ export default function Home() {
       <Welcome onUpdate={setShape}/>
       <div className="main-container">
         <div className="shape-container">
-        {randomShape.length > 0 && (<MoveShape shape={randomShape} setBoard={setBoard} board={board} />)}
+        {randomShape.length > 0 && (<MoveShape shape={randomShape} setBoard={setBoard} board={board} rowLimit={ROWS} colLimit={COLS}/>)}
         </div>
 
         <Board board={ board } />
