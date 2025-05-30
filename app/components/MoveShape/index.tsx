@@ -31,7 +31,6 @@ const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, 
 
 
   useEffect(() => {
-    console.log('the shape coordinate is', shapeCoordinate)
   }, [shapeCoordinate])
 
 
@@ -56,7 +55,6 @@ const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, 
       const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
 
       const canMove = ifCanMove({edgeMaxRow: edgeMaxRow, edgeMaxCol: edgeMaxCol, edgeMinCol: edgeMinCol, rowLimit: rowLimit, colLimit: colLimit, activity: e.key})
-      console.log('can I move', canMove)
       if (canMove){
       const cleanedBoard = cleanUpBoard({board: board, shapeCoordinate: shapeCoordinate})
       const {newBoard, shapePos} = updateBoard({board:cleanedBoard, shapeCoordinate: shapeCoordinate, activity: e.key});
