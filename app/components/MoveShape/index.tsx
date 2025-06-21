@@ -35,11 +35,34 @@ const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, 
 
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    let newRow = shapeCoordinate[0]["row"];
+    let newCol = shapeCoordinate[0]["col"];
+
+    intervalId = setInterval(() => {
+
+      const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
+      const canMove = ifCanMove({
+        edgeMaxRow, edgeMaxCol, edgeMinCol,
+        rowLimit, colLimit, activity: 'ArrowDown'
+      });
+  
+      if (canMove) {
+        const cleanedBoard = cleanUpBoard({ board, shapeCoordinate });
+        const { newBoard, shapePos } = updateBoard({
+          board: cleanedBoard,
+          shapeCoordinate,
+          activity: 'ArrowDown'
+        });
+        setBoard(newBoard);
+        setShapeCoordinate(shapePos);
+      }
+    }, 1000);
+
+
     const handleKeyDown = (e: KeyboardEvent) => {
 
-      let newRow = shapeCoordinate[0]["row"];
-      let newCol = shapeCoordinate[0]["col"];
-
+      //allow user to control the position 
       if (e.key === 'ArrowDown') {
         newRow += 1;
       } else if (e.key === 'ArrowLeft') {
@@ -64,7 +87,10 @@ const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, 
 
     };
       window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        clearInterval(intervalId);
+      };
 
   }), ([shape, board]);
 

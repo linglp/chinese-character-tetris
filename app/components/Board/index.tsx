@@ -1,5 +1,6 @@
 import './index.scss';
 import React, { useEffect } from 'react';
+import Timer from '../Timer';
 
 type BoardProps = {
     board: number[][];
@@ -15,6 +16,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
 
   return (
     <div className="board">
+      <Timer />
       {board.map((row, rowIndex) => (
         <div key={rowIndex} className="row">
           {row.map((cell, colIndex) => (
