@@ -9,6 +9,11 @@ type MoveCheckParams = {
     activity: string;
   };
 
+type ifReachLimitParams = {
+  edgeMaxRow: number;
+  rowLimit: number; 
+};
+
 export function computeBorder(position: shapePositionType[]): [number, number, number, number]{
     if (position.length === 0) return [0, 0, 0, 0];
 
@@ -64,11 +69,10 @@ export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   return positions;
 }
 
-export function ifReachLimit({edgeMaxRow, rowLimit}){
+export function ifReachLimit({edgeMaxRow, rowLimit}: ifReachLimitParams){
   // if the edge of the shape has reached the bottom of the board
-  console.log('edgeMaxRow', edgeMaxRow)
 
-  //account for index
+  //account for index 0
   if (edgeMaxRow + 1 == rowLimit) {
     return true
   }
