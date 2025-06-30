@@ -10,7 +10,6 @@ type MoveCheckParams = {
   };
 
 export function computeBorder(position: shapePositionType[]): [number, number, number, number]{
-
     if (position.length === 0) return [0, 0, 0, 0];
 
     const { maxRow, maxCol, minRow, minCol } = position.reduce(
@@ -29,8 +28,6 @@ export function computeBorder(position: shapePositionType[]): [number, number, n
 }
 
 export function ifCanMove({edgeMaxRow, edgeMaxCol, edgeMinCol, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
-  console.log('edge min col', edgeMinCol);
-
   if (activity === 'ArrowRight') {
         if (edgeMaxCol + 1 < colLimit){
             return true;
@@ -65,4 +62,18 @@ export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   });
 
   return positions;
+}
+
+export function ifReachLimit({edgeMaxRow, rowLimit}){
+  // if the edge of the shape has reached the bottom of the board
+  console.log('edgeMaxRow', edgeMaxRow)
+
+  //account for index
+  if (edgeMaxRow + 1 == rowLimit) {
+    return true
+  }
+  else{
+    return false
+  }
+
 }
