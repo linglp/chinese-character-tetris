@@ -1,3 +1,4 @@
+import {cleanUpBoard} from '../Board/util'
 import type { shapePositionType } from "../Board/util";
 
 type MoveCheckParams = {
@@ -12,7 +13,14 @@ type MoveCheckParams = {
 type ifReachLimitParams = {
   edgeMaxRow: number;
   rowLimit: number; 
+  occupied: boolean | undefined; 
 };
+
+type ifOccupyParams = {
+  shapeCoordinate: shapePositionType[];
+  activity: string; 
+  board: number[][];
+}
 
 export function computeBorder(position: shapePositionType[]): [number, number, number, number]{
     if (position.length === 0) return [0, 0, 0, 0];
@@ -31,6 +39,44 @@ export function computeBorder(position: shapePositionType[]): [number, number, n
 
     return [maxRow, maxCol, minRow, minCol]
 }
+
+export function findOccupant(nextShape: shapePositionType[], board: number[][]){
+  const numRows = board.length;
+  const numCols = board[0].length;
+
+  for (const coord of nextShape) {
+    var row: number = coord["row"]
+    var col: number = coord["col"]
+  
+    // row and col can be undefined if next shape is out of border
+    // if next shape is in border, test if it is occupied on the board
+    if (row < numRows && col < numCols){
+      var spot = board[row][col]
+      if (spot == 1){
+        return true
+      }
+    }
+  }
+  return false
+}
+
+export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams){
+  let nextShape; 
+
+  //create a copy of the current board 
+  var newBoard = cleanUpBoard({ board, shapeCoordinate });
+  
+  //check if moving this shape down, any shape has occupied the next space
+  if (activity === 'ArrowDown'){
+    nextShape = shapeCoordinate.map(coord =>({
+      ...coord,
+      row: coord.row + 1
+    }))
+  }
+  
+  return nextShape && findOccupant(nextShape, newBoard)
+
+  }
 
 export function ifCanMove({edgeMaxRow, edgeMaxCol, edgeMinCol, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
   if (activity === 'ArrowRight') {
@@ -69,11 +115,14 @@ export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   return positions;
 }
 
-export function ifReachLimit({edgeMaxRow, rowLimit}: ifReachLimitParams){
-  // if the edge of the shape has reached the bottom of the board
-
+export function ifReachLimit({edgeMaxRow, rowLimit, occupied}: ifReachLimitParams){
+  //if reaching a space that has been occupied, return true
+  if (occupied == true){
+    return true
+  }
+  //check if the edge of the shape has reached the bottom of the board
   //account for index 0
-  if (edgeMaxRow + 1 == rowLimit) {
+  else if (edgeMaxRow + 1 == rowLimit) {
     return true
   }
   else{
