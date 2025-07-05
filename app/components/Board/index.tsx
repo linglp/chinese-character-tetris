@@ -11,7 +11,6 @@ type BoardProps = {
 const Board: React.FC<BoardProps> = ({ board }) => {
   //re-render the board every time there's an update
   useEffect(() => {
-    console.log('updating the board...', board)
   }, [board]);
 
   return (

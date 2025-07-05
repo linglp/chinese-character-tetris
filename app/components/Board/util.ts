@@ -20,10 +20,7 @@ export function cleanUpBoard({board, shapeCoordinate}:cleanUpBoardProps): number
     shapeCoordinate.forEach((object) => {
         newBoard[object["row"]][object["col"]] = 0;
       });
-
-
-    console.log('new board after clean', newBoard)
-
+      
     return newBoard
 }
 
