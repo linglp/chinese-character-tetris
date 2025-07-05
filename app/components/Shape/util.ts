@@ -13,9 +13,8 @@ export function createLShape2(): number[][]{
 };
 
 export function createSquareShape(): number[][]{
-    return [[1, 1, 1],
-            [1, 1, 1],
-            [1, 1, 1]]; 
+    return [[1, 1],
+            [1, 1]]; 
 }
 
 export function createTShape(): number[][]{
@@ -67,5 +66,4 @@ export function randomShapeGenerator(): number[][]{
     else {
         return createSquareShape()
     }
-
 }
