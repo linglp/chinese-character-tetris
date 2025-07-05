@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import {updateBoard, cleanUpBoard} from '../Board/util'
-import { computeBorder, ifCanMove, mapShapeToPositions} from './util';
+import { computeBorder, ifCanMove, mapShapeToPositions, ifReachLimit, ifOccupy} from './util';
+import { randomShapeGenerator } from '../Shape/util';
 
 
 type MoveShapeProps = {
+  setShape: (value: number[][]) => void;
   shape: number[][];
   board: number[][];
   rowLimit: number;
@@ -13,7 +15,7 @@ type MoveShapeProps = {
 
 };
 
-const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, colLimit}) => {
+const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, rowLimit, colLimit}) => {
   //coordinate of shape that is currently being moved
   const [shapeCoordinate, setShapeCoordinate] = useState(mapShapeToPositions(shape));
   const [hasInitialized, setHasInitialized] = useState(false);
@@ -22,6 +24,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, 
   //update the board once
   useEffect(() => {
     if (!hasInitialized && shape.length > 0) {
+      console.log('starting again......')
       const {newBoard, shapePos} = updateBoard({board: board, shapeCoordinate: shapeCoordinate, activity: ""});
       setShapeCoordinate(shapePos)
       setBoard(newBoard);
@@ -46,9 +49,12 @@ const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, 
         edgeMaxRow, edgeMaxCol, edgeMinCol,
         rowLimit, colLimit, activity: 'ArrowDown'
       });
-  
-      if (canMove) {
+
+      const Occupied = ifOccupy({shapeCoordinate, activity: 'ArrowDown', board})
+
+      if (canMove && !Occupied) {
         const cleanedBoard = cleanUpBoard({ board, shapeCoordinate });
+
         const { newBoard, shapePos } = updateBoard({
           board: cleanedBoard,
           shapeCoordinate,
@@ -56,6 +62,23 @@ const MoveShape: React.FC<MoveShapeProps> = ({shape, setBoard, board, rowLimit, 
         });
         setBoard(newBoard);
         setShapeCoordinate(shapePos);
+      }
+
+      const reachLimit = ifReachLimit({edgeMaxRow, rowLimit, occupied: Occupied});
+      console.log('if reachLimit', reachLimit)
+      if (reachLimit){
+        // the shape becomes part of the board
+        const { newBoard, shapePos} = updateBoard({
+          board: board,
+          shapeCoordinate,
+          activity: ""
+        });
+        setBoard(newBoard);
+        //restart a new shape
+        var newShape = randomShapeGenerator()
+        setShape(newShape);
+        setShapeCoordinate(mapShapeToPositions(newShape))
+        setHasInitialized(false);
       }
     }, 1000);
 
