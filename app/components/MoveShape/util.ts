@@ -50,7 +50,7 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]){
   
     // row and col can be undefined if next shape is out of border
     // if next shape is in border, test if it is occupied on the board
-    if (row < numRows && col < numCols){
+    if (row >= 0 && col >= 0 && row < numRows && col < numCols){
       var spot = board[row][col]
       if (spot == 1){
         return true
