@@ -53,10 +53,9 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       const Occupied = ifOccupy({shapeCoordinate, activity: 'ArrowDown', board})
 
       if (canMove && !Occupied) {
-        const cleanedBoard = cleanUpBoard({ board, shapeCoordinate });
 
         const { newBoard, shapePos } = updateBoard({
-          board: cleanedBoard,
+          board: board,
           shapeCoordinate,
           activity: 'ArrowDown'
         });
@@ -101,8 +100,8 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
 
       const canMove = ifCanMove({edgeMaxRow: edgeMaxRow, edgeMaxCol: edgeMaxCol, edgeMinCol: edgeMinCol, rowLimit: rowLimit, colLimit: colLimit, activity: e.key})
       if (canMove){
-      const cleanedBoard = cleanUpBoard({board: board, shapeCoordinate: shapeCoordinate})
-      const {newBoard, shapePos} = updateBoard({board:cleanedBoard, shapeCoordinate: shapeCoordinate, activity: e.key});
+      //const cleanedBoard = cleanUpBoard({board: board, shapeCoordinate: shapeCoordinate})
+      const {newBoard, shapePos} = updateBoard({board:board, shapeCoordinate: shapeCoordinate, activity: e.key});
       setBoard(newBoard);
       setShapeCoordinate(shapePos);
       }

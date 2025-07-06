@@ -14,33 +14,55 @@ export type shapePositionType = {
     col: number;
 }
 
+/**
+ * Cleans up the board by removing the shape's current position.
+ * @param params - The parameters object.
+ * @param params.board - The current game board.
+ * @param params.shapeCoordinate - The coordinates of the shape to remove.
+ * @returns A new board with the shape cleared from its previous position.
+ */
 export function cleanUpBoard({board, shapeCoordinate}:cleanUpBoardProps): number[][] {
     var newBoard = board.map(row => [...row]);
 
     shapeCoordinate.forEach((object) => {
         newBoard[object["row"]][object["col"]] = 0;
       });
-      
+
     return newBoard
 }
 
+
+/**
+ * Update the board based on the activity. If there's no activity provided, just paste the shape to the board. 
+ * @param params - The parameters object.
+ * @param params.board - The current game board.
+ * @param params.shapeCoordinate - The coordinates of the shape to remove.
+ * @returns An object containing:
+ * - `newBoard`: The updated board after applying the activity.
+ * - `shapePos`: The new shape coordinates after the move.
+ */
 export function updateBoard({board, shapeCoordinate, activity}: updateBoardProps):  { newBoard: number[][]; shapePos: shapePositionType[] } {
-    // shallow clone each row
-    var newBoard = board.map(row => [...row]);
+  const cleanBoard = activity !== "" ? cleanUpBoard({ board, shapeCoordinate }): board;
+  
+  // shallow clone each row
+    var newBoard = cleanBoard.map(row => [...row]);
     let shapePos: shapePositionType[] = [];
     var updated = shapeCoordinate
 
     if (activity === 'ArrowDown') {
         var updated = shapeCoordinate.map(pos => ({row: pos.row+1, col:pos.col}));
-    } else if (activity === 'ArrowLeft') {
+    } 
+    else if (activity === 'ArrowLeft') {
         //will forever be greater or equal to zero
         var updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col-1}));
-
-      } else if (activity === 'ArrowRight') {
+    } 
+    else if (activity === 'ArrowRight') {
         var updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col+1}));
-      } else {
-        var updated = shapeCoordinate
       }
+    else {
+        var updated = shapeCoordinate
+    }
+
     updated.forEach((pos) => {
         var rowIndex = pos["row"]
         var colIndex = pos["col"]
@@ -48,9 +70,7 @@ export function updateBoard({board, shapeCoordinate, activity}: updateBoardProps
     })
 
     shapePos = updated
-
     return { newBoard, shapePos };
-
 }
 
 
