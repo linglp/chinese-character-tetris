@@ -65,7 +65,6 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       }
 
       const reachLimit = ifReachLimit({edgeMaxRow, rowLimit, occupied: Occupied});
-      console.log('if reachLimit', reachLimit)
       if (reachLimit){
         // the shape becomes part of the board
         const { newBoard, shapePos} = updateBoard({
