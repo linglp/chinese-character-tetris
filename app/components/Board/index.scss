@@ -1,0 +1,36 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(auto, 30px);
+    grid-auto-rows: 30px;        
+    gap: 0px; //gap between rows in the board;
+    margin: 0 auto;
+    max-width: 900px;
+    justify-content: center;  /* Center horizontally */
+    align-items: center;      /* Center vertically (within available height) */
+    height: 100vh;            /* Fill the full viewport height */
+    width: fit-content;
+  }
+
+  
+  .row {
+    display: flex;
+  }
+  
+  .cell {
+    width: 30px;
+    height: 30px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .cell-1{
+    border: 1px solid red;
+    background-color: red;
+  }
+
+  .cell-0{
+    border: 1px solid #ccc;
+  }
+  
