@@ -114,7 +114,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
         clearInterval(intervalId);
       };
 
-  }), ([shape, board]);
+  }), [shape, board];
 
 
   return null; 
