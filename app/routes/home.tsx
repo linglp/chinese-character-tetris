@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Route } from "./+types/home";
-import  Welcome  from "../welcome/welcome";
+import Welcome from "../welcome/welcome";
 import Board from "../components/Board";
 import MoveShape from "../components/MoveShape"
 import './home.scss';
