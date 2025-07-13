@@ -22,6 +22,13 @@ type ifOccupyParams = {
   board: number[][];
 }
 
+
+/**
+ * compute border of a given shape
+ * 
+ * @param {shapePositionType[]} position - position of a given shape on the board
+ * @returns {Type[]} - return maxRows, maxCols, minRow, minCol
+ */
 export function computeBorder(position: shapePositionType[]): [number, number, number, number]{
     if (position.length === 0) return [0, 0, 0, 0];
 
@@ -40,7 +47,14 @@ export function computeBorder(position: shapePositionType[]): [number, number, n
     return [maxRow, maxCol, minRow, minCol]
 }
 
-export function findOccupant(nextShape: shapePositionType[], board: number[][]){
+/**
+ * Return true if a given shape has been occupied on the board. 
+ * 
+ * @param {shapePositionType[]} nextShape - position of a given shape on the board
+ * @param {number[][]} board - board
+ * @returns {boolean} - return true if this position has been occupied
+ */
+export function findOccupant(nextShape: shapePositionType[], board: number[][]): boolean {
   const numRows = board.length;
   const numCols = board[0].length;
 
@@ -52,7 +66,7 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]){
     // if next shape is in border, test if it is occupied on the board
     if (row >= 0 && col >= 0 && row < numRows && col < numCols){
       var spot = board[row][col]
-      if (spot == 1){
+      if (spot === 1){
         return true
       }
     }
