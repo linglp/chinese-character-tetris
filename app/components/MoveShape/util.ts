@@ -24,6 +24,23 @@ type ifOccupyParams = {
 
 
 /**
+ * map shape position to the board for debugging purpose
+ * 
+ * @param {shapePositionType[]} position - position of a given shape on the board
+ * @param {number[][]} board
+ * @returns {number[][]} - return the new board with the shape
+ */
+export function debugShapePosition(position: shapePositionType[], board: number[][]): number[][]{
+  var newBoard = board.map(row => [...row])
+
+  position.map(dot => {
+    newBoard[dot.row][dot.col] = 1
+  })
+
+  return newBoard
+}
+
+/**
  * compute border of a given shape
  * 
  * @param {shapePositionType[]} position - position of a given shape on the board
@@ -74,21 +91,63 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
   return false
 }
 
-export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams){
-  let nextShape; 
 
+/**
+ * Computes the next shape coordinates based on a user activity.
+ *
+ * @param {string} activity - The action to perform (e.g. 'ArrowDown', 'ArrowLeft', 'ArrowRight').
+ * @param {shapePositionType[]} shapeCoordinate - Array of current shape positions (each with row and col).
+ * @returns {shapePositionType[]|undefined} New array of shape positions after movement, or undefined if activity is unrecognized.
+ */
+function findNextShape(activity: string, shapeCoordinate: shapePositionType[]): shapePositionType[]|undefined {
+  let nextShape; 
+  //check if moving this shape down, any shape has occupied the next space
+  if (activity === 'ArrowDown'){
+      nextShape = shapeCoordinate.map(coord =>({
+        ...coord,
+        row: coord.row + 1
+      }))
+  } 
+  else if (activity === 'ArrowLeft'){
+    nextShape = shapeCoordinate.map(coord =>({
+      ...coord,
+      col: coord.col - 1
+    }))
+  }
+  else if (activity === 'ArrowRight'){
+    nextShape = shapeCoordinate.map(coord =>({
+      ...coord,
+      col: coord.col + 1
+    }))
+  }
+  return nextShape
+}
+
+/**
+ * Returns true if the given shape's next position is already occupied on the board based on activity.
+ *
+ * @param {ifOccupyParams} params - Object containing shapeCoordinate, activity, and board
+ * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
+ * @param {string} params.activity - The user activity (e.g., 'ArrowDown')
+ * @param {number[][]} params.board - The current state of the game board
+ * @returns {boolean} True if the next shape position is occupied. Undefined if the activity is not recognized
+ */
+export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): boolean|undefined {
   //create a copy of the current board 
   var newBoard = cleanUpBoard({ board, shapeCoordinate });
   
-  //check if moving this shape down, any shape has occupied the next space
-  if (activity === 'ArrowDown'){
-    nextShape = shapeCoordinate.map(coord =>({
-      ...coord,
-      row: coord.row + 1
-    }))
+  //find the next shape based on activity
+  var nextShape = findNextShape(activity, shapeCoordinate);
+
+  const result = nextShape && findOccupant(nextShape, newBoard);
+
+  if (result && nextShape) {
+    console.debug('Debug info - nextShape on the board:');
+    debugShapePosition(nextShape, board).forEach(row => console.debug(row.join(' ')));
+    console.debug('Debug info - findOccupant:', findOccupant(nextShape, newBoard));
   }
-  
-  return nextShape && findOccupant(nextShape, newBoard)
+
+  return result
 
   }
 
