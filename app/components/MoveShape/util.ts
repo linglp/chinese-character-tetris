@@ -2,16 +2,14 @@ import {cleanUpBoard} from '../Board/util'
 import type { shapePositionType } from "../Board/util";
 
 type MoveCheckParams = {
-    edgeMaxRow: number;
-    edgeMaxCol: number;
-    edgeMinCol: number;
+    shapeCoordinate: shapePositionType[];
     rowLimit: number;
     colLimit: number;
     activity: string;
   };
 
 type ifReachLimitParams = {
-  edgeMaxRow: number;
+  shapeCoordinate: shapePositionType[];
   rowLimit: number; 
   occupied: boolean | undefined; 
 };
@@ -91,16 +89,26 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
   return false
 }
 
-
 /**
- * Computes the next shape coordinates based on a user activity.
+ * Computes the next shape coordinates based on a user activity. 
+ * If the next shape is out of bound, return undefined
  *
  * @param {string} activity - The action to perform (e.g. 'ArrowDown', 'ArrowLeft', 'ArrowRight').
  * @param {shapePositionType[]} shapeCoordinate - Array of current shape positions (each with row and col).
- * @returns {shapePositionType[]|undefined} New array of shape positions after movement, or undefined if activity is unrecognized.
+ * @returns {shapePositionType[]|undefined} New array of shape positions after movement, or undefined if activity is unrecognized or out of bound
  */
-function findNextShape(activity: string, shapeCoordinate: shapePositionType[]): shapePositionType[]|undefined {
+function findNextShape(activity: string, shapeCoordinate: shapePositionType[], board: number[][]): shapePositionType[]|undefined {
   let nextShape; 
+  var rowLimit = board.length;
+  var colLimit = board[0].length;
+
+  //if the next shape is not in border, output a message
+  var inBorder = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
+  if (!inBorder){
+    console.debug("the next shape is not in border")
+    return undefined
+  }
+
   //check if moving this shape down, any shape has occupied the next space
   if (activity === 'ArrowDown'){
       nextShape = shapeCoordinate.map(coord =>({
@@ -120,6 +128,7 @@ function findNextShape(activity: string, shapeCoordinate: shapePositionType[]): 
       col: coord.col + 1
     }))
   }
+
   return nextShape
 }
 
@@ -135,9 +144,10 @@ function findNextShape(activity: string, shapeCoordinate: shapePositionType[]): 
 export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): boolean|undefined {
   //create a copy of the current board 
   var newBoard = cleanUpBoard({ board, shapeCoordinate });
-  
-  //find the next shape based on activity
-  var nextShape = findNextShape(activity, shapeCoordinate);
+
+  // find the next shape based on activity
+  // if the next shape is not in bound, this would return undefined. 
+  var nextShape = findNextShape(activity, shapeCoordinate, board);
 
   const result = nextShape && findOccupant(nextShape, newBoard);
 
@@ -146,33 +156,31 @@ export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): bo
     debugShapePosition(nextShape, board).forEach(row => console.debug(row.join(' ')));
     console.debug('Debug info - findOccupant:', findOccupant(nextShape, newBoard));
   }
-
+  
   return result
 
   }
 
-export function ifCanMove({edgeMaxRow, edgeMaxCol, edgeMinCol, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
+  
+export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
+  const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
+
   if (activity === 'ArrowRight') {
-        if (edgeMaxCol + 1 < colLimit){
-            return true;
-        }
-        return false; 
-      } else if (activity === 'ArrowLeft') {
+    return edgeMaxCol + 1 < colLimit;
+  } 
+  else if (activity === 'ArrowLeft') {
+    return edgeMinCol - 1 >= 0
+  } 
+  else if (activity === 'ArrowDown') {
+    return edgeMaxRow + 1 < rowLimit
+  }
 
-        if (edgeMinCol - 1 >= 0){
-            return true;
-        }
-        return false;
-      } else if (activity === 'ArrowDown') {
-        if (edgeMaxRow + 1 < rowLimit){
-            return true;
-        }
-        return false;
-      } else {
-        return false;
-      }
+  else{
+    //for other unrecognized activity, cannot move
+    //will need to update this function for rotation to work properly
+    return false
+  }
 }
-
 
 export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   const positions: shapePositionType[] = [];
@@ -188,18 +196,16 @@ export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   return positions;
 }
 
-export function ifReachLimit({edgeMaxRow, rowLimit, occupied}: ifReachLimitParams){
+export function ifReachLimit({shapeCoordinate, rowLimit, occupied}: ifReachLimitParams){
+  const [edgeMaxRow, , , ] = computeBorder(shapeCoordinate);
   //if reaching a space that has been occupied, return true
   if (occupied == true){
     return true
   }
   //check if the edge of the shape has reached the bottom of the board
   //account for index 0
-  else if (edgeMaxRow + 1 == rowLimit) {
-    return true
-  }
-  else{
-    return false
+  else {
+    return edgeMaxRow + 1 == rowLimit
   }
 
 }
