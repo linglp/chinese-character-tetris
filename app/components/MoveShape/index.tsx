@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { updateBoard } from '../Board/util'
-import { ifInBorder, mapShapeToPositions, ifCollide, ifOccupy} from './util';
+import { ifInBorder, mapShapeToPositions, ifOccupy} from './util';
 import { randomShapeGenerator } from '../Shape/util';
 
 
