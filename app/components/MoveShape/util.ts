@@ -166,8 +166,8 @@ export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): bo
  * Look at the edges of the current shape. Returns true if the next activity is in border. 
  *
  * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
- * @param {number} params.rowLimit - The row limit of the board
- * @param {number} params.colLimit - The col limit of the board
+ * @param {number} params.rowLimit - The total row number of the board
+ * @param {number} params.colLimit - The total col number of the board
  * @param {string} params.activity - The user activity (e.g., 'ArrowDown')
  * @returns {boolean} True if the next shape position is occupied. Undefined if the activity is not recognized
  */
@@ -191,6 +191,13 @@ export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: Move
   }
 }
 
+
+/**
+ * Turn raw matrix to position of the shape on a given board
+ *
+ * @param {number[][]} params.matrix - shape on the board
+ * @returns {shapePositionType[]} return the position of a shape on the board
+ */
 export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   const positions: shapePositionType[] = [];
 

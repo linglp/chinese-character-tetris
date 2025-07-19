@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy, ifInBorder } from '../util';
+import { computeBorder, findOccupant, ifOccupy, ifInBorder, mapShapeToPositions } from '../util';
 
 const testShapes = [
     {
@@ -260,7 +260,6 @@ const testNextShapeInBorder = [
         expected: false, 
     },
 ]
-
 describe('test if the next shape is going to be in border', ()=>{
     test.each(testNextShapeInBorder)('$name', ({name, shapeCoordinate, rowLimit, colLimit, activity, expected}) => {
         const result = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
@@ -268,3 +267,53 @@ describe('test if the next shape is going to be in border', ()=>{
       });
 })
 
+const testShapeMatrix = [
+    {
+        name: "square shape",
+        matrix: [
+            [0, 0, 0],
+            [0, 1, 1],
+            [0, 1, 1],
+        ],
+        expected:[
+            {"row": 1, "col": 1},
+            {"row": 1, "col": 2},
+            {"row": 2, "col": 1},
+            {"row": 2, "col": 2},
+        ]
+    },
+    {
+        name: "S shape",
+        matrix: [
+            [0, 1, 1],
+            [1, 1, 0],
+            [0, 0, 0],
+        ],
+        expected:[
+            {"row": 0, "col": 1},
+            {"row": 0, "col": 2},
+            {"row": 1, "col": 0},
+            {"row": 1, "col": 1},
+        ]
+    },
+    {
+        name: "L shape",
+        matrix: [
+            [0, 1, 0],
+            [0, 1, 0],
+            [1, 1, 0],
+        ],
+        expected:[
+            {"row": 0, "col": 1},
+            {"row": 1, "col": 1},
+            {"row": 2, "col": 0},
+            {"row": 2, "col": 1},
+        ]
+    },
+]
+describe('test if shapes can be mapped to coordinates correctly', ()=>{
+    test.each(testShapeMatrix)('$name', ({name, matrix, expected}) => {
+        const result = mapShapeToPositions(matrix)
+        expect(result).toEqual(expected);
+      });
+})
