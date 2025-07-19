@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
-import {updateBoard, cleanUpBoard} from '../Board/util'
-import { computeBorder, ifCanMove, mapShapeToPositions, ifReachLimit, ifOccupy} from './util';
+import { updateBoard } from '../Board/util'
+import { ifInBorder, mapShapeToPositions, ifOccupy} from './util';
 import { randomShapeGenerator } from '../Shape/util';
 
 
@@ -43,29 +43,24 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
     let newCol = shapeCoordinate[0]["col"];
 
     intervalId = setInterval(() => {
-
-      const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
-      const canMove = ifCanMove({
-        edgeMaxRow, edgeMaxCol, edgeMinCol,
+      const inBorder = ifInBorder({
+        shapeCoordinate,
         rowLimit, colLimit, activity: 'ArrowDown'
       });
 
       const Occupied = ifOccupy({shapeCoordinate, activity: 'ArrowDown', board})
+      const available = inBorder && !Occupied
 
-      if (canMove && !Occupied) {
-        const cleanedBoard = cleanUpBoard({ board, shapeCoordinate });
-
+      if (available) {
         const { newBoard, shapePos } = updateBoard({
-          board: cleanedBoard,
+          board: board,
           shapeCoordinate,
           activity: 'ArrowDown'
         });
         setBoard(newBoard);
         setShapeCoordinate(shapePos);
       }
-
-      const reachLimit = ifReachLimit({edgeMaxRow, rowLimit, occupied: Occupied});
-      if (reachLimit){
+      else {
         // the shape becomes part of the board
         const { newBoard, shapePos} = updateBoard({
           board: board,
@@ -96,13 +91,9 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       } else {
         return; // ignore other keys
       }
-
-      const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
-
-      const canMove = ifCanMove({edgeMaxRow: edgeMaxRow, edgeMaxCol: edgeMaxCol, edgeMinCol: edgeMinCol, rowLimit: rowLimit, colLimit: colLimit, activity: e.key})
-      if (canMove){
-      const cleanedBoard = cleanUpBoard({board: board, shapeCoordinate: shapeCoordinate})
-      const {newBoard, shapePos} = updateBoard({board:cleanedBoard, shapeCoordinate: shapeCoordinate, activity: e.key});
+      const inBorder = ifInBorder({shapeCoordinate: shapeCoordinate, rowLimit: rowLimit, colLimit: colLimit, activity: e.key})
+      if (inBorder){
+      const {newBoard, shapePos} = updateBoard({board:board, shapeCoordinate: shapeCoordinate, activity: e.key});
       setBoard(newBoard);
       setShapeCoordinate(shapePos);
       }
