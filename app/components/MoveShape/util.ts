@@ -25,7 +25,7 @@ type ifOccupyParams = {
 export function debugShapePosition(position: shapePositionType[], board: number[][]): number[][]{
   const newBoard = board.map(row => [...row])
 
-  position.map(dot => {
+  position.forEach(dot => {
     newBoard[dot.row][dot.col] = 1
   })
 
