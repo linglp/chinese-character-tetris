@@ -8,12 +8,6 @@ type MoveCheckParams = {
     activity: string;
   };
 
-type ifCollideParams = {
-  shapeCoordinate: shapePositionType[];
-  rowLimit: number; 
-  occupied: boolean | undefined; 
-};
-
 type ifOccupyParams = {
   shapeCoordinate: shapePositionType[];
   activity: string; 
@@ -210,20 +204,4 @@ export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   });
 
   return positions;
-}
-
-
-
-export function ifCollide({shapeCoordinate, rowLimit, occupied}: ifCollideParams){
-  const [edgeMaxRow, , , ] = computeBorder(shapeCoordinate);
-  //if reaching a space that has been occupied, return true
-  if (occupied == true){
-    return true
-  }
-  //check if the edge of the shape has reached the bottom of the board
-  //account for index 0
-  else {
-    return edgeMaxRow + 1 == rowLimit
-  }
-
 }

@@ -49,9 +49,9 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       });
 
       const Occupied = ifOccupy({shapeCoordinate, activity: 'ArrowDown', board})
+      const available = inBorder && !Occupied
 
-      if (inBorder && !Occupied) {
-
+      if (available) {
         const { newBoard, shapePos } = updateBoard({
           board: board,
           shapeCoordinate,
@@ -60,9 +60,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
         setBoard(newBoard);
         setShapeCoordinate(shapePos);
       }
-
-      const ifCollided = ifCollide({shapeCoordinate, rowLimit, occupied: Occupied});
-      if (ifCollided){
+      else {
         // the shape becomes part of the board
         const { newBoard, shapePos} = updateBoard({
           board: board,
