@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy } from '../util';
+import { computeBorder, findOccupant, ifOccupy, ifInBorder } from '../util';
 
 const testShapes = [
     {
@@ -205,3 +205,66 @@ describe('test if the next shape is occupied based on activity provided', ()=>{
         expect(result).toEqual(expected);
       });
 })
+
+
+const testNextShapeInBorder = [
+    {
+        name: "the square shape is moving down and will be in border",
+        shapeCoordinate: [
+            {"row": 0, "col": 1},
+            {"row": 0, "col": 2},
+            {"row": 1, "col": 1},
+            {"row": 1, "col": 2},
+        ],
+        rowLimit: 3, 
+        colLimit: 3,
+        activity: "ArrowDown",
+        expected: true, 
+    },
+    {
+        name: "the current S shape is moving down and will be out of border",
+        shapeCoordinate: [
+            {"row": 1, "col": 1},
+            {"row": 1, "col": 2},
+            {"row": 2, "col": 0},
+            {"row": 2, "col": 1},
+        ],
+        rowLimit: 3, 
+        colLimit: 3,
+        activity: "ArrowDown",
+        expected: false, 
+    },
+    {
+        name: "the current I shape is moving down and will be out of border",
+        shapeCoordinate: [
+            {"row": 0, "col": 0},
+            {"row": 1, "col": 0},
+            {"row": 2, "col": 0},
+        ],
+        activity: "ArrowRight",
+        rowLimit: 2, 
+        colLimit: 5,
+        expected: true, 
+    },
+    {
+        name: "the current L shape is moving right and will be out of border",
+        shapeCoordinate: [
+            {"row": 2, "col": 2},
+            {"row": 3, "col": 2},
+            {"row": 4, "col": 2},
+            {"row": 4, "col": 1},
+        ],
+        activity: "ArrowRight",
+        rowLimit: 10, 
+        colLimit: 2,
+        expected: false, 
+    },
+]
+
+describe('test if the next shape is going to be in border', ()=>{
+    test.each(testNextShapeInBorder)('$name', ({name, shapeCoordinate, rowLimit, colLimit, activity, expected}) => {
+        const result = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
+        expect(result).toEqual(expected);
+      });
+})
+

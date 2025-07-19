@@ -156,12 +156,21 @@ export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): bo
     debugShapePosition(nextShape, board).forEach(row => console.debug(row.join(' ')));
     console.debug('Debug info - findOccupant:', findOccupant(nextShape, newBoard));
   }
-  
+
   return result
 
   }
 
-  
+
+/**
+ * Look at the edges of the current shape. Returns true if the next activity is in border. 
+ *
+ * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
+ * @param {number} params.rowLimit - The row limit of the board
+ * @param {number} params.colLimit - The col limit of the board
+ * @param {string} params.activity - The user activity (e.g., 'ArrowDown')
+ * @returns {boolean} True if the next shape position is occupied. Undefined if the activity is not recognized
+ */
 export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
   const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
 
