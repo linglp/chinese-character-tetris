@@ -99,7 +99,7 @@ function findNextShape(activity: string, shapeCoordinate: shapePositionType[], b
 
   //if the next shape is not in border, output a message
   const inBorder = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
-  if (!inBorder && process.env.NODE_ENV !== 'production'){
+  if (!inBorder){
     console.debug("the next shape is not in border")
     return undefined
   }
