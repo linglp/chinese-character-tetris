@@ -22,7 +22,7 @@ export type shapePositionType = {
  * @returns A new board with the shape cleared from its previous position.
  */
 export function cleanUpBoard({board, shapeCoordinate}:cleanUpBoardProps): number[][] {
-    var newBoard = board.map(row => [...row]);
+    const newBoard = board.map(row => [...row]);
 
     shapeCoordinate.forEach((object) => {
         newBoard[object["row"]][object["col"]] = 0;
@@ -45,28 +45,28 @@ export function updateBoard({board, shapeCoordinate, activity}: updateBoardProps
   const cleanBoard = activity !== "" ? cleanUpBoard({ board, shapeCoordinate }): board;
   
   // shallow clone each row
-    var newBoard = cleanBoard.map(row => [...row]);
+    const newBoard = cleanBoard.map(row => [...row]);
     let shapePos: shapePositionType[] = [];
-    var updated = shapeCoordinate
+    let updated = shapeCoordinate
 
     if (activity === 'ArrowDown') {
-        var updated = shapeCoordinate.map(pos => ({row: pos.row+1, col:pos.col}));
+        updated = shapeCoordinate.map(pos => ({row: pos.row+1, col:pos.col}));
     } 
     else if (activity === 'ArrowLeft') {
         //will forever be greater or equal to zero
-        var updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col-1}));
+        updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col-1}));
     } 
     else if (activity === 'ArrowRight') {
-        var updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col+1}));
+        updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col+1}));
       }
     else {
-        var updated = shapeCoordinate
+        updated = shapeCoordinate
     }
 
     updated.forEach((pos) => {
-        var rowIndex = pos["row"]
-        var colIndex = pos["col"]
-        newBoard[rowIndex][colIndex] = 1
+        const rowIndex = pos.row;
+        const colIndex = pos.col;
+        newBoard[rowIndex][colIndex] = 1;
     })
 
     shapePos = updated

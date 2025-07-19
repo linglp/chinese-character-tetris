@@ -23,7 +23,7 @@ type ifOccupyParams = {
  * @returns {number[][]} - return the new board with the shape
  */
 export function debugShapePosition(position: shapePositionType[], board: number[][]): number[][]{
-  var newBoard = board.map(row => [...row])
+  const newBoard = board.map(row => [...row])
 
   position.map(dot => {
     newBoard[dot.row][dot.col] = 1
@@ -36,7 +36,7 @@ export function debugShapePosition(position: shapePositionType[], board: number[
  * compute border of a given shape
  * 
  * @param {shapePositionType[]} position - position of a given shape on the board
- * @returns {Type[]} - return maxRows, maxCols, minRow, minCol
+ * @returns {[number, number, number, number]} - return maxRows, maxCols, minRow, minCol
  */
 export function computeBorder(position: shapePositionType[]): [number, number, number, number]{
     if (position.length === 0) return [0, 0, 0, 0];
@@ -74,7 +74,7 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
     // row and col can be undefined if next shape is out of border
     // if next shape is in border, test if it is occupied on the board
     if (row >= 0 && col >= 0 && row < numRows && col < numCols){
-      var spot = board[row][col]
+      const spot = board[row][col]
       if (spot === 1){
         return true
       }
@@ -93,11 +93,11 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
  */
 function findNextShape(activity: string, shapeCoordinate: shapePositionType[], board: number[][]): shapePositionType[]|undefined {
   let nextShape; 
-  var rowLimit = board.length;
-  var colLimit = board[0].length;
+  const rowLimit = board.length;
+  const colLimit = board[0].length;
 
   //if the next shape is not in border, output a message
-  var inBorder = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
+  const inBorder = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
   if (!inBorder){
     console.debug("the next shape is not in border")
     return undefined
@@ -137,11 +137,11 @@ function findNextShape(activity: string, shapeCoordinate: shapePositionType[], b
  */
 export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): boolean|undefined {
   //create a copy of the current board 
-  var newBoard = cleanUpBoard({ board, shapeCoordinate });
+  const newBoard = cleanUpBoard({ board, shapeCoordinate });
 
   // find the next shape based on activity
   // if the next shape is not in bound, this would return undefined. 
-  var nextShape = findNextShape(activity, shapeCoordinate, board);
+  const nextShape = findNextShape(activity, shapeCoordinate, board);
 
   const result = nextShape && findOccupant(nextShape, newBoard);
 
