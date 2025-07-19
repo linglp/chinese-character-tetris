@@ -99,7 +99,7 @@ function findNextShape(activity: string, shapeCoordinate: shapePositionType[], b
 
   //if the next shape is not in border, output a message
   const inBorder = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
-  if (!inBorder){
+  if (!inBorder && process.env.NODE_ENV !== 'production'){
     console.debug("the next shape is not in border")
     return undefined
   }
@@ -146,7 +146,7 @@ export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): bo
 
   const result = nextShape && findOccupant(nextShape, newBoard);
 
-  if (result && nextShape) {
+  if (result && nextShape && process.env.NODE_ENV !== 'production') {
     console.debug('Debug info - nextShape on the board:');
     debugShapePosition(nextShape, board).forEach(row => console.debug(row.join(' ')));
     console.debug('Debug info - findOccupant:', findOccupant(nextShape, newBoard));
