@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { updateBoard } from '../Board/util'
-import { ifInBorder, mapShapeToPositions, ifReachLimit, ifOccupy} from './util';
+import { ifInBorder, mapShapeToPositions, ifCollide, ifOccupy} from './util';
 import { randomShapeGenerator } from '../Shape/util';
 
 
@@ -61,8 +61,8 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
         setShapeCoordinate(shapePos);
       }
 
-      const reachLimit = ifReachLimit({shapeCoordinate, rowLimit, occupied: Occupied});
-      if (reachLimit){
+      const ifCollided = ifCollide({shapeCoordinate, rowLimit, occupied: Occupied});
+      if (ifCollided){
         // the shape becomes part of the board
         const { newBoard, shapePos} = updateBoard({
           board: board,

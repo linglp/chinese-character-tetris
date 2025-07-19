@@ -8,7 +8,7 @@ type MoveCheckParams = {
     activity: string;
   };
 
-type ifReachLimitParams = {
+type ifCollideParams = {
   shapeCoordinate: shapePositionType[];
   rowLimit: number; 
   occupied: boolean | undefined; 
@@ -212,7 +212,9 @@ export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   return positions;
 }
 
-export function ifReachLimit({shapeCoordinate, rowLimit, occupied}: ifReachLimitParams){
+
+
+export function ifCollide({shapeCoordinate, rowLimit, occupied}: ifCollideParams){
   const [edgeMaxRow, , , ] = computeBorder(shapeCoordinate);
   //if reaching a space that has been occupied, return true
   if (occupied == true){
