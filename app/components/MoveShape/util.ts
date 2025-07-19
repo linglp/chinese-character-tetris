@@ -14,6 +14,7 @@ type ifOccupyParams = {
   board: number[][];
 }
 
+const OCCUPIED_CELL = 1
 
 /**
  * map shape position to the board for debugging purpose
@@ -75,7 +76,7 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
     // if next shape is in border, test if it is occupied on the board
     if (row >= 0 && col >= 0 && row < numRows && col < numCols){
       const spot = board[row][col]
-      if (spot === 1){
+      if (spot === OCCUPIED_CELL){
         return true
       }
     }
