@@ -134,7 +134,7 @@ function findNextShape(activity: string, shapeCoordinate: shapePositionType[], b
  * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
  * @param {string} params.activity - The user activity (e.g., 'ArrowDown')
  * @param {number[][]} params.board - The current state of the game board
- * @returns {boolean} True if the next shape position is occupied. Undefined if the activity is not recognized
+ * @returns {boolean|undefined} True if the next shape position is occupied. Undefined if the activity is not recognized
  */
 export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): boolean|undefined {
   //create a copy of the current board 
@@ -164,7 +164,7 @@ export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): bo
  * @param {number} params.rowLimit - The total row number of the board
  * @param {number} params.colLimit - The total col number of the board
  * @param {string} params.activity - The user activity (e.g., 'ArrowDown')
- * @returns {boolean} True if the next shape position is occupied. Undefined if the activity is not recognized
+ * @returns {boolean} True if the next shape position is within the border. Returns false for unrecognized activities.
  */
 export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
   const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
