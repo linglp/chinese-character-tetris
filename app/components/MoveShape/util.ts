@@ -166,30 +166,31 @@ export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): bo
  * @returns {boolean} True if the next shape position is within the border. Returns false for unrecognized activities.
  */
 export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
+  const moveLeft =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]-1 }));
+  const moveRight =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]+1 }));
+  const moveDown =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"]+1, "col": p["col"] }));
 
-  const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
-  
+  var moved = shapeCoordinate;
 
   if (activity === 'ArrowRight') {
-    return edgeMaxCol + 1 < colLimit;
+    moved = moveRight(shapeCoordinate);
   } 
   else if (activity === 'ArrowLeft') {
-    return edgeMinCol - 1 >= 0
+    moved = moveLeft(shapeCoordinate);
   } 
   else if (activity === 'ArrowDown') {
-    return edgeMaxRow + 1 < rowLimit
-  }
-  else if (activity == 'ArrowUp'){
-    const newCoordinate = rotateShape(shapeCoordinate);
-    const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(newCoordinate);
-    return edgeMaxRow < rowLimit && edgeMaxCol < colLimit && edgeMinCol >= 0
+    moved = moveDown(shapeCoordinate);
   }
 
+  else if (activity == 'ArrowUp'){
+    moved = rotateShape(shapeCoordinate);
+  }
+  //for unrecognized key, just return 
   else{
-    //for other unrecognized activity, cannot move
-    //will need to update this function for rotation to work properly
     return false
   }
+  const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(moved);
+  return edgeMaxRow < rowLimit && edgeMaxCol < colLimit && edgeMinCol >= 0 && edgeMinRow >= 0
 }
 
 
