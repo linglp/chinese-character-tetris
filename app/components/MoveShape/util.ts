@@ -138,7 +138,7 @@ export function ifOccupy({nextShape, board}: ifOccupyParams): boolean|undefined 
 /**
  * Look at the edges of the current shape. Returns true if the next activity is in border. 
  *
- * @param {nextShape[]} params.shapeCoordinate - Next coordinates of the shape
+ * @param {nextShape[]} params.nextShape - Next coordinates of the shape
  * @param {number} params.rowLimit - The total row number of the board
  * @param {number} params.colLimit - The total col number of the board
  * @returns {boolean} True if the next shape position is within the border. Returns false for unrecognized activities.
