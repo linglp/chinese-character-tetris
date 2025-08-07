@@ -78,6 +78,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
 
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
 
       //allow user to control the position 
       if (e.key === 'ArrowDown') {
@@ -87,10 +88,8 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
         newCol = Math.max(0, newCol - 1);
       } else if (e.key === 'ArrowRight') {
         newCol += 1;
-
-      } else {
-        return; // ignore other keys
       }
+      
       const inBorder = ifInBorder({shapeCoordinate: shapeCoordinate, rowLimit: rowLimit, colLimit: colLimit, activity: e.key})
       if (inBorder){
       const {newBoard, shapePos} = updateBoard({board:board, shapeCoordinate: shapeCoordinate, activity: e.key});

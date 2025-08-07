@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy, ifInBorder, mapShapeToPositions } from '../util';
+import { computeBorder, findOccupant, ifOccupy, ifInBorder, mapShapeToPositions, rotateShape } from '../util';
 
 const testShapes = [
     {
@@ -314,6 +314,26 @@ const testShapeMatrix = [
 describe('test if shapes can be mapped to coordinates correctly', ()=>{
     test.each(testShapeMatrix)('$name', ({name, matrix, expected}) => {
         const result = mapShapeToPositions(matrix)
+        expect(result).toEqual(expected);
+      });
+})
+
+
+const testRotateShape = [
+    {
+        "name": "rotate I shape from horizontal to vertical",
+        "coordinate": [{"row": 0, "col": 0}, {"row": 1, "col": 0}, {"row": 2, "col": 0}, {"row": 3, "col": 0}],
+        "expected": [{"row": 1, "col": -1}, {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}]
+    },
+    {
+        "name": "rotate I shape from vertical to horizontal",
+        "coordinate": [{"row": 1, "col": -1}, {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}],
+        "expected": [{"row": 2, "col": 0}, {"row": 1, "col": 0}, {"row": 0, "col": 0}, {"row": -1, "col": 0}]
+    },
+]
+describe('test if shape can be rotated correctly', ()=>{
+    test.each(testRotateShape)('$name', ({name, coordinate, expected}) => {
+        const result = rotateShape(coordinate)
         expect(result).toEqual(expected);
       });
 })

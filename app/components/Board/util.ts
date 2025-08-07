@@ -1,3 +1,5 @@
+import {rotateShape} from '../MoveShape/util'
+
 type updateBoardProps = {
     board: number[][];
     shapeCoordinate: shapePositionType[];
@@ -58,6 +60,9 @@ export function updateBoard({board, shapeCoordinate, activity}: updateBoardProps
     } 
     else if (activity === 'ArrowRight') {
         updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col+1}));
+      }
+    else if (activity === 'ArrowUp') {
+        updated =  rotateShape(shapeCoordinate);
       }
     else {
         updated = shapeCoordinate

@@ -166,7 +166,9 @@ export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): bo
  * @returns {boolean} True if the next shape position is within the border. Returns false for unrecognized activities.
  */
 export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
+
   const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(shapeCoordinate);
+  
 
   if (activity === 'ArrowRight') {
     return edgeMaxCol + 1 < colLimit;
@@ -177,6 +179,11 @@ export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: Move
   else if (activity === 'ArrowDown') {
     return edgeMaxRow + 1 < rowLimit
   }
+  else if (activity == 'ArrowUp'){
+    const newCoordinate = rotateShape(shapeCoordinate);
+    const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(newCoordinate);
+    return edgeMaxRow < rowLimit && edgeMaxCol < colLimit && edgeMinCol >= 0
+  }
 
   else{
     //for other unrecognized activity, cannot move
@@ -185,6 +192,77 @@ export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: Move
   }
 }
 
+
+/**
+ * Rotate the shape clock wise
+ * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
+ * @returns {shapePositionType} - Returns the pivot point if it's on the shape; otherwise, uses the second point on the shape as the pivot point. 
+*/
+function getPivot(shapeCoordinate: shapePositionType[]): shapePositionType{
+  const rows = shapeCoordinate.map(cell => cell.row);
+  const cols = shapeCoordinate.map(cell => cell.col);
+  
+  const rowCenter = (Math.min(...rows) + Math.max(...rows)) / 2;
+  const colCenter = (Math.min(...cols) + Math.max(...cols)) / 2;
+
+  //if pivot point does not exist on the shape, then just use the second point as "pivot" point
+  if (shapeCoordinate.includes({row: rowCenter, col: colCenter })){
+    return { row: rowCenter, col: colCenter }
+  }
+  else{
+    return shapeCoordinate[1]
+  }
+}
+
+/**
+ * Identify O shape
+ * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
+ * @returns {boolean} - Returns True if the shape is an O shape; otherwise return False
+*/
+function identifyO(shapeCoordinate: shapePositionType[]): boolean {
+  const startPoint = shapeCoordinate[0]
+  const squareShape: shapePositionType[] = [
+    startPoint,
+    {"row": startPoint["row"], "col": startPoint["col"]+1},
+    {"row": startPoint["row"]+1, "col": startPoint["col"]},
+    {"row": startPoint["row"]+1, "col": startPoint["col"]+1},
+  ]
+  return JSON.stringify(squareShape) == JSON.stringify(shapeCoordinate)
+}
+
+/**
+ * Rotate a shape
+ * @param {shapePositionType[]} params.shapeCoordinate - coordinates of the current shape
+ * @returns {shapePositionType[]} - Returns positions of the rotated shape
+*/
+export function rotateShape(shapeCoordinate: shapePositionType[]): shapePositionType[]{
+  //do not rotate O shape
+  if (identifyO(shapeCoordinate)){
+    return shapeCoordinate
+  }
+  //find a fixed pivot point
+  const pivot = getPivot(shapeCoordinate);
+  
+  function normalizeZero(x: number):number {
+  return x === 0 ? 0 : x;
+}
+  //subtract its coordinate from each cell
+  let relativeCells = shapeCoordinate.map(cell => ({
+    row: cell.row - pivot.row,
+    col: cell.col - pivot.col
+  }));
+
+  let rotatedCells = relativeCells.map(cell => ({
+    row: normalizeZero(-cell.col),
+    col: normalizeZero(cell.row)
+  }));
+
+  let final = rotatedCells.map(cell => ({
+  row: cell.row + pivot.row,
+  col: cell.col + pivot.col
+}));
+  return final
+}
 
 /**
  * Turn raw matrix to position of the shape on a given board
