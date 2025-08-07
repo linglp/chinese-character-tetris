@@ -94,18 +94,7 @@ export function createSquareShape1(): number[][]{
     return [[1, 1],
             [1, 1]]; 
 }
-export function createSquareShape2(): number[][]{
-    return [[1, 1],
-            [1, 1]]; 
-}
-export function createSquareShape3(): number[][]{
-    return [[1, 1],
-            [1, 1]]; 
-}
-export function createSquareShape4(): number[][]{
-    return [[1, 1],
-            [1, 1]]; 
-}
+
 //The I shape family
 export function createIShape1(): number[][]{
     return [[1],
@@ -117,16 +106,7 @@ export function createIShape1(): number[][]{
 export function createIShape2(): number[][]{
     return [[1, 1, 1, 1]]; 
 }
-export function createIShape3(): number[][]{
-    return [[1],
-            [1],
-            [1],
-            [1]
-        ]; 
-}
-export function createIShape4(): number[][]{
-    return [[1, 1, 1, 1]]; 
-}
+
 //The T shape family
 export function createTShape1(): number[][]{
     return [
@@ -173,8 +153,6 @@ const allShapesFunctions = [
     //I shape family
     "createIShape1",
     "createIShape2",
-    "createIShape3",
-    "createIShape4",
     //J shape family
     "createJShape1",
     "createJShape2",
@@ -187,9 +165,6 @@ const allShapesFunctions = [
     "createZShape4",
     //O shape family
     "createSquareShape1",
-    "createSquareShape2",
-    "createSquareShape3",
-    "createSquareShape4",
 ]
 
 const shapeRegistry: { [key: string]: () => number[][] } = {
@@ -211,8 +186,6 @@ const shapeRegistry: { [key: string]: () => number[][] } = {
     //I shape family
     createIShape1,
     createIShape2,
-    createIShape3,
-    createIShape4,
     //J shape family,
     createJShape1,
     createJShape2,
@@ -225,9 +198,6 @@ const shapeRegistry: { [key: string]: () => number[][] } = {
     createZShape4,
     //O shape family
     createSquareShape1,
-    createSquareShape2,
-    createSquareShape3,
-    createSquareShape4,
 };
 
 export function randomShapeGenerator(): number[][] {

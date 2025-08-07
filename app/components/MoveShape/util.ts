@@ -181,7 +181,6 @@ export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: Move
   else if (activity === 'ArrowDown') {
     moved = moveDown(shapeCoordinate);
   }
-
   else if (activity == 'ArrowUp'){
     moved = rotateShape(shapeCoordinate);
   }
@@ -258,10 +257,19 @@ export function rotateShape(shapeCoordinate: shapePositionType[]): shapePosition
     col: normalizeZero(cell.row)
   }));
 
-  let final = rotatedCells.map(cell => ({
+  var final = rotatedCells.map(cell => ({
   row: cell.row + pivot.row,
-  col: cell.col + pivot.col
-}));
+  col: cell.col + pivot.col})
+);
+  //sort keys based on row, col of the new shape, modify input in place
+  final.sort((a, b) => {
+    if (a.row !== b.row) {
+      return a.row - b.row;
+    } else {
+      return a.col - b.col;
+    }
+  });
+
   return final
 }
 
