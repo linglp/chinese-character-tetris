@@ -95,7 +95,7 @@ export function findNextShape(activity: string, shapeCoordinate: shapePositionTy
   const moveRight =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]+1 }));
   const moveDown =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"]+1, "col": p["col"] }));
 
-  var moved = shapeCoordinate;
+  let moved = shapeCoordinate;
 
   if (activity === 'ArrowRight') {
     moved = moveRight(shapeCoordinate);
