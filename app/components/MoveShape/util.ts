@@ -1,16 +1,13 @@
-import {cleanUpBoard} from '../Board/util'
 import type { shapePositionType } from "../Board/util";
 
 type MoveCheckParams = {
-    shapeCoordinate: shapePositionType[];
+    nextShape: shapePositionType[];
     rowLimit: number;
     colLimit: number;
-    activity: string;
   };
 
 type ifOccupyParams = {
-  shapeCoordinate: shapePositionType[];
-  activity: string; 
+  nextShape: shapePositionType[];
   board: number[][];
 }
 
@@ -76,6 +73,7 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
     // if next shape is in border, test if it is occupied on the board
     if (row >= 0 && col >= 0 && row < numRows && col < numCols){
       if (board[row][col] === OCCUPIED_CELL){
+        
         return true
       }
     }
@@ -89,88 +87,15 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
  *
  * @param {string} activity - The action to perform (e.g. 'ArrowDown', 'ArrowLeft', 'ArrowRight').
  * @param {shapePositionType[]} shapeCoordinate - Array of current shape positions (each with row and col).
- * @returns {shapePositionType[]|undefined} New array of shape positions after movement, or undefined if activity is unrecognized or out of bound
+ * @returns {shapePositionType[]} New array of shape positions after movement
  */
-function findNextShape(activity: string, shapeCoordinate: shapePositionType[], board: number[][]): shapePositionType[]|undefined {
-  let nextShape; 
-  const rowLimit = board.length;
-  const colLimit = board[0].length;
+export function findNextShape(activity: string, shapeCoordinate: shapePositionType[]): shapePositionType[]{
 
-  //if the next shape is not in border, output a message
-  const inBorder = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
-  if (!inBorder){
-    console.debug("the next shape is not in border")
-    return undefined
-  }
-
-  //check if moving this shape down, any shape has occupied the next space
-  if (activity === 'ArrowDown'){
-      nextShape = shapeCoordinate.map(coord =>({
-        ...coord,
-        row: coord.row + 1
-      }))
-  } 
-  else if (activity === 'ArrowLeft'){
-    nextShape = shapeCoordinate.map(coord =>({
-      ...coord,
-      col: coord.col - 1
-    }))
-  }
-  else if (activity === 'ArrowRight'){
-    nextShape = shapeCoordinate.map(coord =>({
-      ...coord,
-      col: coord.col + 1
-    }))
-  }
-
-  return nextShape
-}
-
-/**
- * Returns true if the given shape's next position is already occupied on the board based on activity.
- *
- * @param {ifOccupyParams} params - Object containing shapeCoordinate, activity, and board
- * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
- * @param {string} params.activity - The user activity (e.g., 'ArrowDown')
- * @param {number[][]} params.board - The current state of the game board
- * @returns {boolean|undefined} True if the next shape position is occupied. Undefined if the activity is not recognized
- */
-export function ifOccupy({shapeCoordinate, activity, board}: ifOccupyParams): boolean|undefined {
-  //create a copy of the current board 
-  const newBoard = cleanUpBoard({ board, shapeCoordinate });
-
-  // find the next shape based on activity
-  // if the next shape is not in bound, this would return undefined. 
-  const nextShape = findNextShape(activity, shapeCoordinate, board);
-
-  const result = nextShape && findOccupant(nextShape, newBoard);
-
-  if (result && nextShape && process.env.NODE_ENV !== 'production') {
-    console.debug('Debug info - nextShape on the board:');
-    debugShapePosition(nextShape, board).forEach(row => console.debug(row.join(' ')));
-    console.debug('Debug info - findOccupant:', findOccupant(nextShape, newBoard));
-  }
-
-  return result
-
-  }
-
-
-/**
- * Look at the edges of the current shape. Returns true if the next activity is in border. 
- *
- * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
- * @param {number} params.rowLimit - The total row number of the board
- * @param {number} params.colLimit - The total col number of the board
- * @param {string} params.activity - The user activity (e.g., 'ArrowDown')
- * @returns {boolean} True if the next shape position is within the border. Returns false for unrecognized activities.
- */
-export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: MoveCheckParams): boolean {
   const moveLeft =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]-1 }));
   const moveRight =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]+1 }));
   const moveDown =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"]+1, "col": p["col"] }));
 
-  var moved = shapeCoordinate;
+  let moved = shapeCoordinate;
 
   if (activity === 'ArrowRight') {
     moved = moveRight(shapeCoordinate);
@@ -184,13 +109,34 @@ export function ifInBorder({shapeCoordinate, rowLimit, colLimit, activity}: Move
   else if (activity == 'ArrowUp'){
     moved = rotateShape(shapeCoordinate);
   }
-  //for unrecognized key, just return 
-  else{
-    return false
-  }
-  const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(moved);
-  return edgeMaxRow < rowLimit && edgeMaxCol < colLimit && edgeMinCol >= 0 && edgeMinRow >= 0
+
+  return moved
 }
+
+/**
+ * Returns true if the given shape's next position is already occupied on the board based on activity.
+ *
+ * @param {ifOccupyParams} params - Object containing shapeCoordinate, activity, and board
+ * @param {shapePositionType[]} params.nextShape - Current coordinates of the shape
+ * @param {number[][]} params.board - The current state of the game board
+ * @returns {boolean|undefined} True if the next shape position is occupied. Undefined if the activity is not recognized
+ */
+export function ifOccupy({nextShape, board}: ifOccupyParams): boolean|undefined {
+  //create a copy of the current board 
+  const newBoard = board.map(row => [...row])
+
+  const result = findOccupant(nextShape, newBoard);
+
+  if (result && nextShape && process.env.NODE_ENV !== 'production') {
+    console.debug('Debug info - nextShape on the board:');
+    debugShapePosition(nextShape, board).forEach(row => console.debug(row.join(' ')));
+    console.debug('Debug info - findOccupant:', findOccupant(nextShape, newBoard));
+  }
+
+  return result
+
+  }
+
 
 
 /**
@@ -271,6 +217,11 @@ export function rotateShape(shapeCoordinate: shapePositionType[]): shapePosition
   });
 
   return final
+}
+
+export function ifInBorder({nextShape, rowLimit, colLimit}: MoveCheckParams): boolean {
+  const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(nextShape);
+  return edgeMaxRow < rowLimit && edgeMaxCol < colLimit && edgeMinCol >= 0 && edgeMinRow >= 0
 }
 
 /**

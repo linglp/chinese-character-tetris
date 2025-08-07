@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
-import { updateBoard } from '../Board/util'
-import { ifInBorder, mapShapeToPositions, ifOccupy} from './util';
+import { updateBoard, cleanUpBoard } from '../Board/util'
+import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape} from './util';
 import { randomShapeGenerator } from '../Shape/util';
 
 
@@ -25,7 +25,8 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
   useEffect(() => {
     if (!hasInitialized && shape.length > 0) {
       console.log('starting again......')
-      const {newBoard, shapePos} = updateBoard({board: board, shapeCoordinate: shapeCoordinate, activity: ""});
+      const nextShape = findNextShape("", shapeCoordinate)
+      const {newBoard, shapePos} = updateBoard({board: board, newShape: nextShape});
       setShapeCoordinate(shapePos)
       setBoard(newBoard);
       setHasInitialized(true); // ensure it only runs once
@@ -36,26 +37,19 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
   useEffect(() => {
   }, [shapeCoordinate])
 
-
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-    let newRow = shapeCoordinate[0]["row"];
-    let newCol = shapeCoordinate[0]["col"];
 
     intervalId = setInterval(() => {
-      const inBorder = ifInBorder({
-        shapeCoordinate,
-        rowLimit, colLimit, activity: 'ArrowDown'
-      });
+      const nextShape = findNextShape("ArrowDown", shapeCoordinate);
+      const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
+      const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
+      const Occupied = ifOccupy({nextShape, board: cleanedBoard});
 
-      const Occupied = ifOccupy({shapeCoordinate, activity: 'ArrowDown', board})
-      const available = inBorder && !Occupied
-
-      if (available) {
+      if (inBorder && !Occupied) {
         const { newBoard, shapePos } = updateBoard({
-          board: board,
-          shapeCoordinate,
-          activity: 'ArrowDown'
+          board: cleanedBoard,
+          newShape: nextShape,
         });
         setBoard(newBoard);
         setShapeCoordinate(shapePos);
@@ -64,8 +58,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
         // the shape becomes part of the board
         const { newBoard, shapePos} = updateBoard({
           board: board,
-          shapeCoordinate,
-          activity: ""
+          newShape: shapeCoordinate,
         });
         setBoard(newBoard);
         //restart a new shape
@@ -79,20 +72,14 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
 
     const handleKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
-
-      //allow user to control the position 
-      if (e.key === 'ArrowDown') {
-        newRow += 1;
-      } else if (e.key === 'ArrowLeft') {
-        //will forever be greater or equal to zero
-        newCol = Math.max(0, newCol - 1);
-      } else if (e.key === 'ArrowRight') {
-        newCol += 1;
-      }
       
-      const inBorder = ifInBorder({shapeCoordinate: shapeCoordinate, rowLimit: rowLimit, colLimit: colLimit, activity: e.key})
-      if (inBorder){
-      const {newBoard, shapePos} = updateBoard({board:board, shapeCoordinate: shapeCoordinate, activity: e.key});
+      const nextShape = findNextShape(e.key, shapeCoordinate);
+      const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
+      const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
+      const Occupied = ifOccupy({nextShape, board: cleanedBoard});
+
+      if (inBorder && !Occupied){
+      const {newBoard, shapePos} = updateBoard({board:cleanedBoard, newShape: nextShape});
       setBoard(newBoard);
       setShapeCoordinate(shapePos);
       }
@@ -105,7 +92,6 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       };
 
   }), [shape, board];
-
 
   return null; 
 }

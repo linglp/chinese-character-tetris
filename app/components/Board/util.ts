@@ -2,8 +2,7 @@ import {rotateShape} from '../MoveShape/util'
 
 type updateBoardProps = {
     board: number[][];
-    shapeCoordinate: shapePositionType[];
-    activity: string; 
+    newShape: shapePositionType[];
 }
 
 type cleanUpBoardProps = {
@@ -38,44 +37,22 @@ export function cleanUpBoard({board, shapeCoordinate}:cleanUpBoardProps): number
  * Update the board based on the activity. If there's no activity provided, just paste the shape to the board. 
  * @param params - The parameters object.
  * @param params.board - The current game board.
- * @param params.shapeCoordinate - The coordinates of the shape to remove.
+ * @param params.newShape - The coordinates of the new shape. 
  * @returns An object containing:
  * - `newBoard`: The updated board after applying the activity.
- * - `shapePos`: The new shape coordinates after the move.
+ * - `shapePos`: The new shape
  */
-export function updateBoard({board, shapeCoordinate, activity}: updateBoardProps):  { newBoard: number[][]; shapePos: shapePositionType[] } {
-  const cleanBoard = activity !== "" ? cleanUpBoard({ board, shapeCoordinate }): board;
-  
+export function updateBoard({board, newShape}: updateBoardProps):  { newBoard: number[][]; shapePos: shapePositionType[] } {
   // shallow clone each row
-    const newBoard = cleanBoard.map(row => [...row]);
-    let shapePos: shapePositionType[] = [];
-    let updated = shapeCoordinate
-
-    if (activity === 'ArrowDown') {
-        updated = shapeCoordinate.map(pos => ({row: pos.row+1, col:pos.col}));
-    } 
-    else if (activity === 'ArrowLeft') {
-        //will forever be greater or equal to zero
-        updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col-1}));
-    } 
-    else if (activity === 'ArrowRight') {
-        updated = shapeCoordinate.map(pos => ({row: pos.row, col:pos.col+1}));
-      }
-    else if (activity === 'ArrowUp') {
-        updated =  rotateShape(shapeCoordinate);
-      }
-    else {
-        updated = shapeCoordinate
-    }
-
-    updated.forEach((pos) => {
-        const rowIndex = pos.row;
-        const colIndex = pos.col;
-        newBoard[rowIndex][colIndex] = 1;
-    })
-
-    shapePos = updated
-    return { newBoard, shapePos };
+  const newBoard = board.map(row => [...row]);
+  const shapePos = newShape
+  
+  newShape.forEach((pos) => {
+    const rowIndex = pos.row;
+    const colIndex = pos.col;
+    newBoard[rowIndex][colIndex] = 1;
+})
+    return { newBoard, shapePos};
 }
 
 

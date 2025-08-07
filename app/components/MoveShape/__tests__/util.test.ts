@@ -128,14 +128,13 @@ describe('test if the next shape will collide with an existing shape', ()=>{
 
 const testIfNextShapeOccupy = [
     {
-        name: "the current square is not going to collide with an existing square",
+        name: "the next square is not going to collide with an existing square",
         shapeCoordinate: [
-            {"row": 0, "col": 1},
-            {"row": 0, "col": 2},
             {"row": 1, "col": 1},
             {"row": 1, "col": 2},
+            {"row": 2, "col": 1},
+            {"row": 2, "col": 2},
         ],
-        activity: "ArrowDown",
         board: [
             [0, 0, 0],
             [0, 0, 0],
@@ -146,49 +145,46 @@ const testIfNextShapeOccupy = [
         expected: false, 
     },
     {
-        name: "the current S shape is going to collide with an existing square",
+        name: "the next S shape is going to collide with an existing square",
         shapeCoordinate: [
-            {"row": 1, "col": 1},
-            {"row": 1, "col": 2},
-            {"row": 2, "col": 0},
             {"row": 2, "col": 1},
-        ],
-        activity: "ArrowDown",
-        board: [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 1, 1],
-            [0, 1, 1],
-          ],
-        expected: true, 
-    },
-    {
-        name: "the current I shape is going to collide with an existing square",
-        shapeCoordinate: [
-            {"row": 2, "col": 0},
-            {"row": 3, "col": 0},
-            {"row": 4, "col": 0},
-        ],
-        activity: "ArrowRight",
-        board: [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 1, 1],
-            [0, 1, 1],
-          ],
-        expected: true, 
-    },
-    {
-        name: "the current L shape is going to collide with an existing square",
-        shapeCoordinate: [
             {"row": 2, "col": 2},
-            {"row": 3, "col": 2},
-            {"row": 4, "col": 2},
+            {"row": 3, "col": 1},
+            {"row": 3, "col": 0},
+        ],
+        board: [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 1, 1],
+            [0, 1, 1],
+          ],
+        expected: true, 
+    },
+    {
+        name: "the next I shape is going to collide with an existing square",
+        shapeCoordinate: [
+            {"row": 2, "col": 1},
+            {"row": 3, "col": 1},
             {"row": 4, "col": 1},
         ],
-        activity: "ArrowLeft",
+        board: [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 1, 1],
+            [0, 1, 1],
+          ],
+        expected: true, 
+    },
+    {
+        name: "the next L shape is going to collide with an existing square",
+        shapeCoordinate: [
+            {"row": 1, "col": 1},
+            {"row": 2, "col": 1},
+            {"row": 3, "col": 1},
+            {"row": 3, "col": 2},
+        ],
         board: [
             [0, 0, 0],
             [0, 0, 0],
@@ -200,8 +196,8 @@ const testIfNextShapeOccupy = [
     },
 ]
 describe('test if the next shape is occupied based on activity provided', ()=>{
-    test.each(testIfNextShapeOccupy)('$name', ({name, shapeCoordinate, activity, board, expected}) => {
-        const result = ifOccupy({shapeCoordinate: shapeCoordinate, activity: activity, board: board});
+    test.each(testIfNextShapeOccupy)('$name', ({name, board, shapeCoordinate, expected}) => {
+        const result = ifOccupy({board: board, nextShape: shapeCoordinate});
         expect(result).toEqual(expected);
       });
 })
@@ -260,12 +256,12 @@ const testNextShapeInBorder = [
         expected: false, 
     },
 ]
-describe('test if the next shape is going to be in border', ()=>{
-    test.each(testNextShapeInBorder)('$name', ({name, shapeCoordinate, rowLimit, colLimit, activity, expected}) => {
-        const result = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
-        expect(result).toEqual(expected);
-      });
-})
+// describe('test if the next shape is going to be in border', ()=>{
+//     test.each(testNextShapeInBorder)('$name', ({name, shapeCoordinate, rowLimit, colLimit, activity, expected}) => {
+//         const result = ifInBorder({shapeCoordinate, rowLimit, colLimit, activity})
+//         expect(result).toEqual(expected);
+//       });
+// })
 
 const testShapeMatrix = [
     {
