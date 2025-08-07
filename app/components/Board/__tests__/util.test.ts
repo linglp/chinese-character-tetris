@@ -61,17 +61,16 @@ const  testUpdateBoardCases = [
     {
         name: 'Move square down',
         board: [
-          [1, 1, 0],
-          [1, 1, 0],
+          [0, 0, 0],
+          [0, 0, 0],
           [0, 0, 0],
         ],
         shape: [
-            {"row": 0, "col": 0},
-            {"row": 0, "col": 1},
             {"row": 1, "col": 0},
             {"row": 1, "col": 1},
+            {"row": 2, "col": 0},
+            {"row": 2, "col": 1},
         ],
-        activity: "ArrowDown",
         expected:
     {
         newBoard: [
@@ -80,10 +79,10 @@ const  testUpdateBoardCases = [
             [1, 1, 0]
         ],
         shapePos:[
-        {"row": 1, "col": 0},
-        {"row": 1, "col": 1},
-        {"row": 2, "col": 0},
-        {"row": 2, "col": 1}]
+          {"row": 1, "col": 0},
+          {"row": 1, "col": 1},
+          {"row": 2, "col": 0},
+          {"row": 2, "col": 1}]
     }
 },
     {
@@ -94,10 +93,10 @@ const  testUpdateBoardCases = [
           [0, 0, 0],
         ],
         shape: [
-            {"row": 0, "col": 0},
-            {"row": 0, "col": 1},
-            {"row": 1, "col": 0},
-            {"row": 1, "col": 1},
+          {"row": 0, "col": 0},
+          {"row": 0, "col": 1},
+          {"row": 1, "col": 0},
+          {"row": 1, "col": 1}
         ],
         activity: "",
         expected:     {
@@ -116,15 +115,15 @@ const  testUpdateBoardCases = [
     {
         name: 'Move square right',
         board: [
-          [1, 1, 0],
-          [1, 1, 0],
+          [0, 0, 0],
+          [0, 0, 0],
           [0, 0, 0],
         ],
         shape: [
-            {"row": 0, "col": 0},
             {"row": 0, "col": 1},
-            {"row": 1, "col": 0},
+            {"row": 0, "col": 2},
             {"row": 1, "col": 1},
+            {"row": 1, "col": 2},
         ],
         activity: "ArrowRight",
         expected:
@@ -145,9 +144,9 @@ const  testUpdateBoardCases = [
     {
         name: 'Move s-shape left without moving other shapes in the board',
         board: [
-          [0, 0, 1, 1],
-          [0, 0, 1, 0],
-          [0, 1, 1, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
           [0, 0, 1, 1],
         ],
         shape: [
@@ -160,17 +159,17 @@ const  testUpdateBoardCases = [
         activity: "ArrowLeft",
         expected: {
         newBoard: [
+            [0, 0, 1, 1],
+            [0, 0, 1, 0],
             [0, 1, 1, 0],
-            [0, 1, 0, 0],
-            [1, 1, 0, 0],
             [0, 0, 1, 1],
           ],
           shapePos:[
-            {"row": 0, "col": 1},
             {"row": 0, "col": 2},
-            {"row": 1, "col": 1},
-            {"row": 2, "col": 0},
+            {"row": 0, "col": 3},
+            {"row": 1, "col": 2},
             {"row": 2, "col": 1},
+            {"row": 2, "col": 2},
         ]
         }
     },
@@ -178,8 +177,8 @@ const  testUpdateBoardCases = [
 
 
 describe('test the board can be updated given a activity', ()=>{
-    test.each(testUpdateBoardCases)('$name', ({name, board, shape, activity, expected}) => {
-        const { newBoard, shapePos }  = updateBoard({board: board, shapeCoordinate: shape, activity});
+    test.each(testUpdateBoardCases)('$name', ({name, board, shape, expected}) => {
+        const { newBoard, shapePos }  = updateBoard({board: board, newShape:shape});
         expect(newBoard).toEqual(expected.newBoard);
         expect(shapePos).toEqual(expected.shapePos);
       });
