@@ -50,7 +50,6 @@ export function updateBoard({board, newShape}: updateBoardProps):  { newBoard: n
     const colIndex = pos.col;
     newBoard[rowIndex][colIndex] = 1;
 })
-    console.log(newBoard);
     return { newBoard, shapePos};
 }
 
