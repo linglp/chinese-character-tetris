@@ -189,9 +189,6 @@ export function rotateShape(shapeCoordinate: shapePositionType[]): shapePosition
   //find a fixed pivot point
   const pivot = getPivot(shapeCoordinate);
   
-  function normalizeZero(x: number):number {
-  return x === 0 ? 0 : x;
-}
   //subtract its coordinate from each cell
   let relativeCells = shapeCoordinate.map(cell => ({
     row: cell.row - pivot.row,
