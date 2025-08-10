@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy, ifInBorder, mapShapeToPositions } from '../util';
+import { computeBorder, findOccupant, ifOccupy, ifInBorder, mapShapeToPositions, rotateShape, debugShapePosition } from '../util';
 
 const testShapes = [
     {
@@ -237,10 +237,10 @@ const testNextShapeInBorder = [
             {"row": 1, "col": 0},
             {"row": 2, "col": 0},
         ],
-        activity: "ArrowRight",
+        activity: "ArrowDown",
         rowLimit: 2, 
         colLimit: 5,
-        expected: true, 
+        expected: false, 
     },
     {
         name: "the current L shape is moving right and will be out of border",
@@ -310,6 +310,56 @@ const testShapeMatrix = [
 describe('test if shapes can be mapped to coordinates correctly', ()=>{
     test.each(testShapeMatrix)('$name', ({name, matrix, expected}) => {
         const result = mapShapeToPositions(matrix)
+        expect(result).toEqual(expected);
+      });
+})
+
+
+const testRotateShape = [
+    {
+        "name": "rotate I shape from horizontal to vertical",
+        "coordinate": [{"row": 1, "col": 1}, {"row": 2, "col": 1}, {"row": 3, "col": 1}, {"row": 4, "col": 1}],
+        "board": [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ],
+        "expected": [{"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}],
+    },
+    {
+        "name": "rotate I shape from vertical to horizontal",
+        "coordinate": [{"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}],
+        "board": [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ],
+        "expected": [{"row": 0, "col": 1}, {"row": 1, "col": 1}, {"row": 2, "col": 1}, {"row": 3, "col": 1}]
+    },
+    {
+        "name": "rotate a L shape",
+        "coordinate": [{"row": 0, "col": 1}, {"row": 1, "col": 1}, {"row": 2, "col": 1}, {"row": 2, "col": 2}],
+        "board": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ],
+        "expected": [{"row": 0, "col": 2}, {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}],
+    }
+]
+describe('test if shape can be rotated correctly', ()=>{
+    test.each(testRotateShape)('$name', ({name, coordinate, board, expected}) => {
+        const result = rotateShape(coordinate)
+        console.debug('Debug info - current shape on the board:');
+        debugShapePosition(coordinate, board).forEach(row => console.debug(row.join(' ')));
+        console.debug('Debug info - new shape on the board:');
+        debugShapePosition(result, board).forEach(row => console.debug(row.join(' ')));
         expect(result).toEqual(expected);
       });
 })

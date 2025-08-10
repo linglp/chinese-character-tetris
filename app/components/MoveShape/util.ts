@@ -87,7 +87,7 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
  *
  * @param {string} activity - The action to perform (e.g. 'ArrowDown', 'ArrowLeft', 'ArrowRight').
  * @param {shapePositionType[]} shapeCoordinate - Array of current shape positions (each with row and col).
- * @returns {shapePositionType[]|undefined} New array of shape positions after movement, or undefined if activity is unrecognized or out of bound
+ * @returns {shapePositionType[]} New array of shape positions after movement
  */
 export function findNextShape(activity: string, shapeCoordinate: shapePositionType[]): shapePositionType[]{
 
@@ -105,6 +105,9 @@ export function findNextShape(activity: string, shapeCoordinate: shapePositionTy
   } 
   else if (activity === 'ArrowDown') {
     moved = moveDown(shapeCoordinate);
+  }
+  else if (activity == 'ArrowUp'){
+    moved = rotateShape(shapeCoordinate);
   }
 
   return moved
@@ -135,14 +138,84 @@ export function ifOccupy({nextShape, board}: ifOccupyParams): boolean|undefined 
   }
 
 
+
 /**
- * Look at the edges of the current shape. Returns true if the next activity is in border. 
- *
- * @param {nextShape[]} params.nextShape - Next coordinates of the shape
- * @param {number} params.rowLimit - The total row number of the board
- * @param {number} params.colLimit - The total col number of the board
- * @returns {boolean} True if the next shape position is within the border. Returns false for unrecognized activities.
- */
+ * Rotate the shape clock wise
+ * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
+ * @returns {shapePositionType} - Returns the pivot point if it's on the shape; otherwise, uses the second point on the shape as the pivot point. 
+*/
+function getPivot(shapeCoordinate: shapePositionType[]): shapePositionType{
+  const rows = shapeCoordinate.map(cell => cell.row);
+  const cols = shapeCoordinate.map(cell => cell.col);
+  
+  const rowCenter = (Math.min(...rows) + Math.max(...rows)) / 2;
+  const colCenter = (Math.min(...cols) + Math.max(...cols)) / 2;
+
+  //if pivot point does not exist on the shape, then just use the second point as "pivot" point
+  if (shapeCoordinate.includes({row: rowCenter, col: colCenter })){
+    return { row: rowCenter, col: colCenter }
+  }
+  else{
+    return shapeCoordinate[1]
+  }
+}
+
+/**
+ * Identify O shape
+ * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
+ * @returns {boolean} - Returns True if the shape is an O shape; otherwise return False
+*/
+function identifyO(shapeCoordinate: shapePositionType[]): boolean {
+  const startPoint = shapeCoordinate[0]
+  const squareShape: shapePositionType[] = [
+    startPoint,
+    {"row": startPoint["row"], "col": startPoint["col"]+1},
+    {"row": startPoint["row"]+1, "col": startPoint["col"]},
+    {"row": startPoint["row"]+1, "col": startPoint["col"]+1},
+  ]
+  return JSON.stringify(squareShape) == JSON.stringify(shapeCoordinate)
+}
+
+/**
+ * Rotate a shape
+ * @param {shapePositionType[]} params.shapeCoordinate - coordinates of the current shape
+ * @returns {shapePositionType[]} - Returns positions of the rotated shape
+*/
+export function rotateShape(shapeCoordinate: shapePositionType[]): shapePositionType[]{
+  //do not rotate O shape
+  if (identifyO(shapeCoordinate)){
+    return shapeCoordinate
+  }
+  //find a fixed pivot point
+  const pivot = getPivot(shapeCoordinate);
+  
+  //subtract its coordinate from each cell
+  let relativeCells = shapeCoordinate.map(cell => ({
+    row: cell.row - pivot.row,
+    col: cell.col - pivot.col
+  }));
+
+  let rotatedCells = relativeCells.map(cell => ({
+    row: normalizeZero(-cell.col),
+    col: normalizeZero(cell.row)
+  }));
+
+  var final = rotatedCells.map(cell => ({
+  row: cell.row + pivot.row,
+  col: cell.col + pivot.col})
+);
+  //sort keys based on row, col of the new shape, modify input in place
+  final.sort((a, b) => {
+    if (a.row !== b.row) {
+      return a.row - b.row;
+    } else {
+      return a.col - b.col;
+    }
+  });
+
+  return final
+}
+
 export function ifInBorder({nextShape, rowLimit, colLimit}: MoveCheckParams): boolean {
   const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(nextShape);
   return edgeMaxRow < rowLimit && edgeMaxCol < colLimit && edgeMinCol >= 0 && edgeMinRow >= 0

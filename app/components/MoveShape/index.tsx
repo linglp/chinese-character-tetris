@@ -71,6 +71,8 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
 
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
+      
       const nextShape = findNextShape(e.key, shapeCoordinate);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
       const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
