@@ -35,10 +35,10 @@ export function cleanUpBoard({board, shapeCoordinate}:cleanUpBoardProps): number
  * Update the board based on the activity. If there's no activity provided, just paste the shape to the board. 
  * @param params - The parameters object.
  * @param params.board - The current game board.
- * @param params.shapeCoordinate - The coordinates of the shape to remove.
+ * @param params.newShape - The coordinates of the new shape. 
  * @returns An object containing:
  * - `newBoard`: The updated board after applying the activity.
- * - `shapePos`: The new shape coordinates after the move.
+ * - `shapePos`: The new shape
  */
 export function updateBoard({board, newShape}: updateBoardProps):  { newBoard: number[][]; shapePos: shapePositionType[] } {
   // shallow clone each row

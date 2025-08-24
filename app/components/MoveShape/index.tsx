@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { updateBoard, cleanUpBoard } from '../Board/util'
-import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape} from './util';
+import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox} from './util';
 import { randomShapeGenerator } from '../Shape/util';
 
 
@@ -12,12 +12,15 @@ type MoveShapeProps = {
   rowLimit: number;
   colLimit: number;
   setBoard: (value: number[][]) => void;
+  setBorderBox: (value: number[][]) => void;
+  borderBox: number[][];
 
 };
 
-const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, rowLimit, colLimit}) => {
+const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, setBorderBox, borderBox, rowLimit, colLimit}) => {
   //coordinate of shape that is currently being moved
   const [shapeCoordinate, setShapeCoordinate] = useState(mapShapeToPositions(shape));
+  const [box, setBorderCoordinate] = useState(saveBox(shape));
   const [hasInitialized, setHasInitialized] = useState(false);
 
   //after click on "start game"
@@ -25,13 +28,13 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
   useEffect(() => {
     if (!hasInitialized && shape.length > 0) {
       console.log('starting again......')
-      const nextShape = findNextShape("", shapeCoordinate)
+      const nextShape = findNextShape("", shapeCoordinate, box, setBorderCoordinate);
       const {newBoard, shapePos} = updateBoard({board: board, newShape: nextShape});
-      setShapeCoordinate(shapePos)
+      setShapeCoordinate(shapePos);
       setBoard(newBoard);
       setHasInitialized(true); // ensure it only runs once
     }
-  }, [shape, hasInitialized]);
+  }, [shape, hasInitialized, box]);
 
 
   useEffect(() => {
@@ -41,7 +44,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
     let intervalId: NodeJS.Timeout;
 
     intervalId = setInterval(() => {
-      const nextShape = findNextShape("ArrowDown", shapeCoordinate);
+      const nextShape = findNextShape("ArrowDown", shapeCoordinate, box, setBorderCoordinate);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
       const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
       const Occupied = ifOccupy({nextShape, board: cleanedBoard});
@@ -64,6 +67,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
         //restart a new shape
         var newShape = randomShapeGenerator()
         setShape(newShape);
+        setBorderCoordinate(saveBox(newShape));
         setShapeCoordinate(mapShapeToPositions(newShape))
         setHasInitialized(false);
       }
@@ -71,7 +75,9 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
 
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      const nextShape = findNextShape(e.key, shapeCoordinate);
+      e.preventDefault();
+      
+      const nextShape = findNextShape(e.key, shapeCoordinate, box, setBorderCoordinate);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
       const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
       const Occupied = ifOccupy({nextShape, board: cleanedBoard});
