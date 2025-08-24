@@ -81,35 +81,40 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
   return false
 }
 
+
 /**
  * Computes the next shape coordinates based on a user activity. 
- * If the next shape is out of bound, return undefined
- *
- * @param {string} activity - The action to perform (e.g. 'ArrowDown', 'ArrowLeft', 'ArrowRight').
- * @param {shapePositionType[]} shapeCoordinate - Array of current shape positions (each with row and col).
- * @returns {shapePositionType[]} New array of shape positions after movement
+ * If the next shape is out of bounds, returns undefined.
+ * @param {string} activity - The action to perform (e.g., 'ArrowDown', 'ArrowLeft', 'ArrowRight').
+ * @param {shapePositionType[]} shapeCoordinate - Current coordinates of the shape (each with row and col).
+ * @param {shapePositionType[]} box - The bounding box of the current shape.
+ * @param {(value: shapePositionType[]) => void} setBorderBoxCoordinate - Callback to update the border box coordinates.
+ * @returns {shapePositionType[]} New coordinates of the shape after movement
  */
-export function findNextShape(activity: string, shapeCoordinate: shapePositionType[]): shapePositionType[]{
-
+export function findNextShape(activity: string, shapeCoordinate: shapePositionType[], box: shapePositionType[], setBorderBoxCoordinate:(value: shapePositionType[]) => void): shapePositionType[]{
   const moveLeft =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]-1 }));
   const moveRight =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]+1 }));
   const moveDown =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"]+1, "col": p["col"] }));
 
   let moved = shapeCoordinate;
+  let newBox = box; 
 
   if (activity === 'ArrowRight') {
     moved = moveRight(shapeCoordinate);
+    newBox = moveRight(box);
   } 
   else if (activity === 'ArrowLeft') {
     moved = moveLeft(shapeCoordinate);
+    newBox = moveLeft(box);
   } 
   else if (activity === 'ArrowDown') {
     moved = moveDown(shapeCoordinate);
+    newBox = moveDown(box);
   }
   else if (activity == 'ArrowUp'){
-    moved = rotateShape(shapeCoordinate);
+    moved = rotateShape(shapeCoordinate, box);
   }
-
+  setBorderBoxCoordinate(newBox);
   return moved
 }
 
@@ -134,91 +139,57 @@ export function ifOccupy({nextShape, board}: ifOccupyParams): boolean|undefined 
   }
 
   return result
-
-  }
-
-
-
-/**
- * Rotate the shape clock wise
- * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
- * @returns {shapePositionType} - Returns the pivot point if it's on the shape; otherwise, uses the second point on the shape as the pivot point. 
-*/
-function getPivot(shapeCoordinate: shapePositionType[]): shapePositionType{
-  const rows = shapeCoordinate.map(cell => cell.row);
-  const cols = shapeCoordinate.map(cell => cell.col);
-  
-  const rowCenter = (Math.min(...rows) + Math.max(...rows)) / 2;
-  const colCenter = (Math.min(...cols) + Math.max(...cols)) / 2;
-
-  //if pivot point does not exist on the shape, then just use the second point as "pivot" point
-  if (shapeCoordinate.includes({row: rowCenter, col: colCenter })){
-    return { row: rowCenter, col: colCenter }
-  }
-  else{
-    return shapeCoordinate[1]
-  }
 }
 
 /**
- * Identify O shape
- * @param {shapePositionType[]} params.shapeCoordinate - Current coordinates of the shape
- * @returns {boolean} - Returns True if the shape is an O shape; otherwise return False
+ * Determines the pivot point for rotating a shape clockwise.
+ * @param {shapePositionType[]} shapeCoordinate - Current coordinates of the shape.
+ * @returns {shapePositionType} The pivot point if it is part of the shape; otherwise, the second point in the shape is used as the pivot point.
 */
-function identifyO(shapeCoordinate: shapePositionType[]): boolean {
-  const startPoint = shapeCoordinate[0]
-  const squareShape: shapePositionType[] = [
-    startPoint,
-    {"row": startPoint["row"], "col": startPoint["col"]+1},
-    {"row": startPoint["row"]+1, "col": startPoint["col"]},
-    {"row": startPoint["row"]+1, "col": startPoint["col"]+1},
-  ]
-  return JSON.stringify(squareShape) == JSON.stringify(shapeCoordinate)
+function getPivot(shapeCoordinate: shapePositionType[]): shapePositionType{
+  const rows = shapeCoordinate.map(cell => cell.row); // vertical positions
+  const cols = shapeCoordinate.map(cell => cell.col); // horizontal positions
+
+  const rowCenter = (Math.min(...rows) + Math.max(...rows)) / 2;
+  const colCenter = (Math.min(...cols) + Math.max(...cols)) / 2;
+
+  return { row: rowCenter, col: colCenter };
 }
 
 /**
  * Rotate a shape
- * @param {shapePositionType[]} params.shapeCoordinate - coordinates of the current shape
+ * @param {shapePositionType[]} shapeCoordinate - coordinates of the current shape
+ * @param {shapePositionType[]} box  - The grid or boxes that define the boundaries.
  * @returns {shapePositionType[]} - Returns positions of the rotated shape
 */
-export function rotateShape(shapeCoordinate: shapePositionType[]): shapePositionType[]{
-  //do not rotate O shape
-  if (identifyO(shapeCoordinate)){
-    return shapeCoordinate
-  }
-  //find a fixed pivot point
-  const pivot = getPivot(shapeCoordinate);
-  
-  function normalizeZero(x: number):number {
-  return x === 0 ? 0 : x;
-}
-  //subtract its coordinate from each cell
-  let relativeCells = shapeCoordinate.map(cell => ({
-    row: cell.row - pivot.row,
-    col: cell.col - pivot.col
-  }));
+export function rotateShape(shapeCoordinate: shapePositionType[], box: shapePositionType[]): shapePositionType[]{
+  console.log("box", box)
+  console.log("shape coordinate", shapeCoordinate)
+  const pivot = getPivot(box);
 
-  let rotatedCells = relativeCells.map(cell => ({
-    row: normalizeZero(-cell.col),
-    col: normalizeZero(cell.row)
-  }));
+  //row is vertical position while col is horizontal position 
+  const cx = pivot["col"];
+  const cy = pivot["row"];
 
-  var final = rotatedCells.map(cell => ({
-  row: cell.row + pivot.row,
-  col: cell.col + pivot.col})
-);
-  //sort keys based on row, col of the new shape, modify input in place
-  final.sort((a, b) => {
-    if (a.row !== b.row) {
-      return a.row - b.row;
-    } else {
-      return a.col - b.col;
-    }
-  });
+  var rotated = shapeCoordinate.map(cell => ({
+  row: Math.round(cy + (cell.col - cx)),   // y' = cy - (x - cx)
+  col: Math.round(cx - (cell.row - cy))    // x' = cx + (y - cy)
+}));
 
-  return final
+console.log("rotated", rotated)
+
+return rotated
+
 }
 
+/**
+ * Checks if a given shape is within the board.
+ * @param {MoveCheckParams} params
+ * @param {shapePositionType[]} params.nextShape - Coordinates of the shape to check.
+ * @param {number} params.rowLimit - Maximum number of rows in the grid.
+ * @param {number} params.colLimit - Maximum number of columns in the grid.
+ * @returns {boolean} True if the shape is entirely within the border; otherwise, false.
+ */
 export function ifInBorder({nextShape, rowLimit, colLimit}: MoveCheckParams): boolean {
   const [edgeMaxRow, edgeMaxCol, edgeMinRow, edgeMinCol] = computeBorder(nextShape);
   return edgeMaxRow < rowLimit && edgeMaxCol < colLimit && edgeMinCol >= 0 && edgeMinRow >= 0
@@ -227,7 +198,7 @@ export function ifInBorder({nextShape, rowLimit, colLimit}: MoveCheckParams): bo
 /**
  * Turn raw matrix to position of the shape on a given board
  *
- * @param {number[][]} params.matrix - shape on the board
+ * @param {number[][]} matrix - shape on the board
  * @returns {shapePositionType[]} return the position of a shape on the board
  */
 export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
@@ -242,4 +213,22 @@ export function mapShapeToPositions(matrix: number[][]): shapePositionType[] {
   });
 
   return positions;
+}
+
+/**
+ * Save the whole box including the shape and the white space
+ *
+ * @param {number[][]} matrix - shape on the board
+ * @returns {shapePositionType[]} return the position of the whole border box
+ */
+export function saveBox(matrix: number[][]): shapePositionType[] {
+  const borderBox: shapePositionType[] = [];
+
+  matrix.forEach((row, rowIndex) => {
+    row.forEach((cell, colIndex) => {
+        borderBox.push({ row: rowIndex, col: colIndex });
+    });
+  });
+
+  return borderBox;
 }

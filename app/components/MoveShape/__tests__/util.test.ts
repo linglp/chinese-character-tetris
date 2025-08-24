@@ -317,8 +317,62 @@ describe('test if shapes can be mapped to coordinates correctly', ()=>{
 
 const testRotateShape = [
     {
-        "name": "rotate I shape from horizontal to vertical",
-        "coordinate": [{"row": 1, "col": 1}, {"row": 2, "col": 1}, {"row": 3, "col": 1}, {"row": 4, "col": 1}],
+        "name": "rotate J shape from horizontal to vertical",
+        "box": [{
+                    "row": 0,
+                    "col": 0
+                },
+                {
+                    "row": 0,
+                    "col": 1
+                },
+                {
+                    "row": 0,
+                    "col": 2
+                },
+                {
+                    "row": 1,
+                    "col": 0
+                },
+                {
+                    "row": 1,
+                    "col": 1
+                },
+                {
+                    "row": 1,
+                    "col": 2
+                },
+                {
+                    "row": 2,
+                    "col": 0
+                },
+                {
+                    "row": 2,
+                    "col": 1
+                },
+                {
+                    "row": 2,
+                    "col": 2
+                }
+        ],
+        "coordinate": [
+                {
+                    "row": 1,
+                    "col": 0
+                },
+                {
+                    "row": 1,
+                    "col": 1
+                },
+                {
+                    "row": 1,
+                    "col": 2
+                },
+                {
+                    "row": 2,
+                    "col": 2
+                }
+        ],
         "board": [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
@@ -327,11 +381,79 @@ const testRotateShape = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
         ],
-        "expected": [{"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}],
+        "expected": [
+            {
+                "row": 0,
+                "col": 1
+            },
+            {
+                "row": 1,
+                "col": 1
+            },
+            {
+                "row": 2,
+                "col": 1
+            },
+            {
+                "row": 2,
+                "col": 0
+            }
+    ],
     },
     {
-        "name": "rotate I shape from vertical to horizontal",
-        "coordinate": [{"row": 2, "col": 0}, {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3}],
+        "name": "rotate I shape",
+        "box": [
+            {
+                "row": 0,
+                "col": 0
+            },
+            {
+                "row": 0,
+                "col": 1
+            },
+            {
+                "row": 0,
+                "col": 2
+            },
+            {
+                "row": 1,
+                "col": 0
+            },
+            {
+                "row": 1,
+                "col": 1
+            },
+            {
+                "row": 1,
+                "col": 2
+            },
+            {
+                "row": 2,
+                "col": 0
+            },
+            {
+                "row": 2,
+                "col": 1
+            },
+            {
+                "row": 2,
+                "col": 2
+            }
+        ], 
+        "coordinate": [
+        {
+            "row": 0,
+            "col": 1
+        },
+        {
+            "row": 1,
+            "col": 1
+        },
+        {
+            "row": 2,
+            "col": 1
+        }
+    ],
         "board": [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
@@ -340,22 +462,107 @@ const testRotateShape = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
         ],
-        "expected": [{"row": 0, "col": 1}, {"row": 1, "col": 1}, {"row": 2, "col": 1}, {"row": 3, "col": 1}]
+        "expected": [
+            {
+                "row": 1,
+                "col": 2
+            },
+            {
+                "row": 1,
+                "col": 1
+            },
+            {
+                "row": 1,
+                "col": 0
+            }
+    ]
     },
     {
         "name": "rotate a L shape",
-        "coordinate": [{"row": 0, "col": 1}, {"row": 1, "col": 1}, {"row": 2, "col": 1}, {"row": 2, "col": 2}],
+        "box": [
+        {
+            "row": 0,
+            "col": 0
+        },
+        {
+            "row": 0,
+            "col": 1
+        },
+        {
+            "row": 0,
+            "col": 2
+        },
+        {
+            "row": 1,
+            "col": 0
+        },
+        {
+            "row": 1,
+            "col": 1
+        },
+        {
+            "row": 1,
+            "col": 2
+        },
+        {
+            "row": 2,
+            "col": 0
+        },
+        {
+            "row": 2,
+            "col": 1
+        },
+        {
+            "row": 2,
+            "col": 2
+        }
+    ],
+        "coordinate": [
+            {
+                "row": 0,
+                "col": 1
+            },
+            {
+                "row": 1,
+                "col": 1
+            },
+            {
+                "row": 2,
+                "col": 0
+            },
+            {
+                "row": 2,
+                "col": 1
+            }
+    ],
         "board": [
             [0, 0, 0],
             [0, 0, 0],
             [0, 0, 0],
         ],
-        "expected": [{"row": 0, "col": 2}, {"row": 1, "col": 0}, {"row": 1, "col": 1}, {"row": 1, "col": 2}],
+        "expected": [
+            {
+                "row": 1,
+                "col": 2
+            },
+            {
+                "row": 1,
+                "col": 1
+            },
+            {
+                "row": 0,
+                "col": 0
+            },
+            {
+                "row": 1,
+                "col": 0
+            }
+],
     }
 ]
 describe('test if shape can be rotated correctly', ()=>{
-    test.each(testRotateShape)('$name', ({name, coordinate, board, expected}) => {
-        const result = rotateShape(coordinate)
+    test.each(testRotateShape)('$name', ({name, coordinate, box, board, expected}) => {
+        const result = rotateShape(coordinate, box)
         console.debug('Debug info - current shape on the board:');
         debugShapePosition(coordinate, board).forEach(row => console.debug(row.join(' ')));
         console.debug('Debug info - new shape on the board:');
