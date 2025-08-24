@@ -175,7 +175,6 @@ export function rotateShape(shapeCoordinate: shapePositionType[], box: shapePosi
 }));
 
 return rotated
-
 }
 
 /**
