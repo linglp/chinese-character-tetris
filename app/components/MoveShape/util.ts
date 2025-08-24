@@ -163,8 +163,6 @@ function getPivot(shapeCoordinate: shapePositionType[]): shapePositionType{
  * @returns {shapePositionType[]} - Returns positions of the rotated shape
 */
 export function rotateShape(shapeCoordinate: shapePositionType[], box: shapePositionType[]): shapePositionType[]{
-  console.log("box", box)
-  console.log("shape coordinate", shapeCoordinate)
   const pivot = getPivot(box);
 
   //row is vertical position while col is horizontal position 
