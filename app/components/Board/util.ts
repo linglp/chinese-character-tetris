@@ -1,5 +1,3 @@
-import {rotateShape} from '../MoveShape/util'
-
 type updateBoardProps = {
     board: number[][];
     newShape: shapePositionType[];
