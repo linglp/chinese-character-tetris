@@ -174,8 +174,6 @@ export function rotateShape(shapeCoordinate: shapePositionType[], box: shapePosi
   col: Math.round(cx - (cell.row - cy))    // x' = cx + (y - cy)
 }));
 
-console.log("rotated", rotated)
-
 return rotated
 
 }
