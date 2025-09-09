@@ -236,8 +236,8 @@ export function saveBox(matrix: number[][]): shapePositionType[] {
  *    2. The updated board after clearing filled rows.
  */
 export function clearBoardCountScore(board: number[][], score: number): [number, number[][]]{
-  let rowsToClear: number[] = [];
-  var newBoard = board.map(row => [...row]);
+  const rowsToClear: number[] = [];
+  const newBoard = board.map(row => [...row]);
   
   for (let i = 0; i < board.length; i++) {
     const allFilled = <T>(arr: T[]): boolean => arr.every(val => val === arr[0] && val === 1);
