@@ -267,3 +267,8 @@ export function clearBoardCountScore(board: number[][], score: number): [number,
 
   return [score, newBoard]
 }
+
+export function ifGameEnd(board: number[][]){
+  let hasOne = board[0].some(cell => cell === 1);
+  return hasOne
+}

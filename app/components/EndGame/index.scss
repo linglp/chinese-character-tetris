@@ -1,0 +1,46 @@
+.splash {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);  /* perfectly center it */
+  
+  padding: 30px 60px;                /* space around the text */
+  border-radius: 12px;
+  background: rgba(181, 157, 135, 0.9);
+  z-index: 3;
+
+  font-size: 2rem;       /* make "Game Over" stand out */
+  font-weight: bold;
+  text-align: center;  /* ensures text centers in the box */
+  white-space: nowrap; /* keeps "Game Over" on one line */
+  color: #fff;
+}
+
+// .win {
+//   background: rgba(237, 194, 46, 0.6);
+//   color: white;
+// }
+
+// .splash > div {
+//   margin: 0 auto;
+// }
+
+// .splash > div > button {
+//   margin: calc(var(--pixel-size) * 3) auto;
+// }
+
+// .splash > div > h1 {
+//   color: rgba(240, 240, 240, 1);
+// }
+
+// .button {
+//   background: var(--button-background);
+//   border: calc(var(--pixel-size) * 0.125) solid var(--primary-background);
+//   border-radius: calc(var(--pixel-size) * 0.5);
+//   font-size: calc(var(--pixel-size) * 2);
+//   line-height: calc(var(--pixel-size) * 4);
+//   padding: calc(var(--pixel-size) * 0.5) calc(var(--pixel-size) * 2);
+//   font-weight: bold;
+//   color: white;
+//   cursor: pointer;
+// }

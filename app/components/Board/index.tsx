@@ -1,14 +1,17 @@
 import './index.scss';
 import React, { useEffect } from 'react';
 import Timer from '../Timer';
+import EndGame from "../EndGame"
 
 type BoardProps = {
     board: number[][];
+    endGame: boolean; 
+    setShape: (value: number[][]) => void;
 };
 
 
 
-const Board: React.FC<BoardProps> = ({ board }) => {
+const Board: React.FC<BoardProps> = ({ board, endGame, setShape}) => {
   //re-render the board every time there's an update
   useEffect(() => {
   }, [board]);
@@ -25,6 +28,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
           ))}
         </div>
       ))}
+      {endGame && <EndGame onUpdate={setShape} />}
     </div>
   );
   };
