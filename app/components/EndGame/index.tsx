@@ -13,9 +13,9 @@ const EndGame: React.FC<EndGameProp> = ({ onUpdate }) => {
     <div className="splash">
       <div>
         <h1>Game Over</h1>
-        {/* <div className="button">
-            <StartGameButton disabled={disabled} onUpdate={onUpdate}/>
-        </div> */}
+        <div className="restart-btn">
+          <StartGameButton disabled={disabled} onUpdate={onUpdate}/>
+        </div>
       </div>
     </div>
   );
