@@ -21,7 +21,6 @@ const OCCUPIED_CELL = 1
  * @returns {number[][]} - return the new board with the shape
  */
 export function debugShapePosition(position: shapePositionType[], board: number[][]): number[][]{
-  console.log(board)
   const newBoard = board.map(row => [...row])
 
   position.forEach(dot => {
