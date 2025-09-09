@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { updateBoard, cleanUpBoard } from '../Board/util'
-import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox} from './util';
+import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox, clearBoardCountScore} from './util';
 import { randomShapeGenerator } from '../Shape/util';
 
 
@@ -13,11 +13,13 @@ type MoveShapeProps = {
   colLimit: number;
   setBoard: (value: number[][]) => void;
   setBorderBox: (value: number[][]) => void;
+  score: number;
+  setScore: (value: number) => void;
   borderBox: number[][];
 
 };
 
-const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, setBorderBox, borderBox, rowLimit, colLimit}) => {
+const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, borderBox, setBorderBox, rowLimit, colLimit}) => {
   //coordinate of shape that is currently being moved
   const [shapeCoordinate, setShapeCoordinate] = useState(mapShapeToPositions(shape));
   const [box, setBorderCoordinate] = useState(saveBox(shape));
@@ -64,7 +66,12 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           newShape: shapeCoordinate,
         });
         setBoard(newBoard);
-        //restart a new shape
+        // also calculate if a shape needs to be cleared
+        const [newScore, updatedBoard] = clearBoardCountScore(newBoard, score);
+        setScore(newScore);
+        setBoard(updatedBoard);
+
+        // restart a new shape
         var newShape = randomShapeGenerator()
         setShape(newShape);
         setBorderCoordinate(saveBox(newShape));

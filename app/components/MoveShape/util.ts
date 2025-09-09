@@ -132,12 +132,6 @@ export function ifOccupy({nextShape, board}: ifOccupyParams): boolean|undefined 
 
   const result = findOccupant(nextShape, newBoard);
 
-  if (result && nextShape && process.env.NODE_ENV !== 'production') {
-    console.debug('Debug info - nextShape on the board:');
-    debugShapePosition(nextShape, board).forEach(row => console.debug(row.join(' ')));
-    console.debug('Debug info - findOccupant:', findOccupant(nextShape, newBoard));
-  }
-
   return result
 }
 
@@ -226,4 +220,50 @@ export function saveBox(matrix: number[][]): shapePositionType[] {
   });
 
   return borderBox;
+}
+
+/**
+ * Clears fully filled rows in a Tetris-like board and returns the updated score and board.
+ *
+ * A row is considered "filled" if all its cells contain `1`. 
+ * Cleared rows are either removed or reset to zeros depending on implementation.
+ * The score can be incremented based on the number of cleared rows.
+ *
+ * @param {number[][]} board - The current game board, represented as a 2D array of numbers.
+ * @param {number} score - The current score before clearing any rows.
+ * @returns {[number, number[][]]} - A tuple containing:
+ *    1. The updated score.
+ *    2. The updated board after clearing filled rows.
+ */
+export function clearBoardCountScore(board: number[][], score: number): [number, number[][]]{
+  const rowsToClear: number[] = [];
+  const newBoard = board.map(row => [...row]);
+  
+  for (let i = 0; i < board.length; i++) {
+    const allFilled = <T>(arr: T[]): boolean => arr.every(val => val === 1);
+    //mark rows that need to be removed
+    const filled = allFilled(board[i])
+    if (filled){
+      rowsToClear.push(i)
+    }
+  }
+  //sort index
+  rowsToClear.sort((a, b) => b - a);
+
+  //remove rows
+  //have to start from the bigger indexs
+  if (rowsToClear.length > 0){
+    for (let i of rowsToClear) {
+      newBoard.splice(i, 1);
+    }
+    //add empty rows back to the top
+    let numCols = board[0].length;
+    for (let i = 0; i < rowsToClear.length; i++) {
+      newBoard.unshift(Array(numCols).fill(0));
+    }
+  }
+
+  score = score + 10 * rowsToClear.length
+
+  return [score, newBoard]
 }
