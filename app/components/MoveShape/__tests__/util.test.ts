@@ -639,7 +639,6 @@ const testClearBoardCountScore = [
 describe('test if shape can be rotated correctly', ()=>{
     test.each(testClearBoardCountScore)('$name', ({board, score, expected}) => {
         const result = clearBoardCountScore(board, score)
-        console.log(result)
         expect(result).toEqual(expected);
       });
 })
