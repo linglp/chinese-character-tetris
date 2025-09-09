@@ -1,6 +1,5 @@
 import StartGameButton from "../components/StartGameButton";
 
-
 // Define the type for the props
 type WelcomeProp = {
   onUpdate: (value: number[][]) => void;
@@ -25,6 +24,8 @@ const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score }) => {
           <div>
             <StartGameButton disabled={disabled} onUpdate={onUpdate} />
           </div>
+
+
 
         </header>
       </div>
