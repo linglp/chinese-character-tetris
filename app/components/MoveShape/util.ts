@@ -240,7 +240,7 @@ export function clearBoardCountScore(board: number[][], score: number): [number,
   const newBoard = board.map(row => [...row]);
   
   for (let i = 0; i < board.length; i++) {
-    const allFilled = <T>(arr: T[]): boolean => arr.every(val => val === arr[0] && val === 1);
+    const allFilled = <T>(arr: T[]): boolean => arr.every(val => val === 1);
     //mark rows that need to be removed
     const filled = allFilled(board[i])
     if (filled){
