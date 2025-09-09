@@ -13,8 +13,8 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const ROWS = 20;
-const COLS = 30;
+const ROWS = 15;
+const COLS = 10;
 
 // initialize board with 0s (empty cells)
 const createBoard = () => {
@@ -27,13 +27,14 @@ export default function Home() {
   const [randomShape, setShape] = useState<number[][]>([]);
   const [board, setBoard] = useState<number[][]>(initBoard);
   const [borderBox, setBorderBox] = useState<number[][]>([]);
+  const [score, setScore] = useState(0);
 
   return (
   <div>
-      <Welcome onUpdate={setShape}/>
+      <Welcome onUpdate={setShape} score={score}/>
       <div className="main-container">
         <div className="shape-container">
-        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBorderBox={setBorderBox} borderBox={borderBox} setBoard={setBoard} board={board} rowLimit={ROWS} colLimit={COLS}/>)}
+        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setBorderBox={setBorderBox} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS}/>)}
         </div>
 
         <Board board={ board } />

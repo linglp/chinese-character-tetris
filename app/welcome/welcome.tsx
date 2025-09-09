@@ -4,9 +4,10 @@ import StartGameButton from "../components/StartGameButton";
 // Define the type for the props
 type WelcomeProp = {
   onUpdate: (value: number[][]) => void;
+  score: number;
 }
 
-const Welcome: React.FC<WelcomeProp> = ({ onUpdate }) => {
+const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score }) => {
   const disabled = false
 
   return (
@@ -15,6 +16,10 @@ const Welcome: React.FC<WelcomeProp> = ({ onUpdate }) => {
         <header className="flex flex-col items-start gap-5 w-[500px] max-w-[100vw] p-4">
           <div>
             Welcome to tetris!
+          </div>
+
+          <div>
+            Score: {score}
           </div>
 
           <div>
