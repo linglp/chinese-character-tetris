@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy, ifInBorder, mapShapeToPositions, rotateShape, debugShapePosition } from '../util';
+import { computeBorder, findOccupant, ifOccupy, mapShapeToPositions, rotateShape, debugShapePosition, clearBoardCountScore } from '../util';
 
 const testShapes = [
     {
@@ -567,6 +567,79 @@ describe('test if shape can be rotated correctly', ()=>{
         debugShapePosition(coordinate, board).forEach(row => console.debug(row.join(' ')));
         console.debug('Debug info - new shape on the board:');
         debugShapePosition(result, board).forEach(row => console.debug(row.join(' ')));
+        expect(result).toEqual(expected);
+      });
+})
+
+const testClearBoardCountScore = [
+    {
+        //all two rows should be cleared
+        "board": [
+            [0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 0],
+        ],
+        "score": 0,
+        "expected": [
+        20,
+        [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+        ],
+        ]
+    },
+    {
+        //all two rows should be cleared
+        //and one row should be moved down by 1
+        "board": [
+            [0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 0],
+        ],
+        "score": 10,
+        "expected": [
+        30,
+        [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1],
+            [0, 0, 0, 0, 0],
+        ], 
+        ]
+    },
+    {
+        //Two rows should be moved down by 1
+        "board": [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1],
+            [1, 1, 0, 1, 1],
+            [1, 1, 1, 1, 1],
+            [1, 1, 1, 0, 0]
+        ],
+        "score": 0,
+        "expected": [
+        10,
+        [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1],
+            [1, 1, 0, 1, 1],
+            [1, 1, 1, 0, 0],
+        ]
+        ]
+    }
+]
+
+describe('test if shape can be rotated correctly', ()=>{
+    test.each(testClearBoardCountScore)('$name', ({board, score, expected}) => {
+        const result = clearBoardCountScore(board, score)
+        console.log(result)
         expect(result).toEqual(expected);
       });
 })
