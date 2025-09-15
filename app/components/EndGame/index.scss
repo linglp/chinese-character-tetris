@@ -1,6 +1,6 @@
 .splash {
   position: absolute;
-  top: 30%;
+  top: 50%;
   left: 50%;
 
   transform: translate(-50%, -50%);
@@ -12,7 +12,6 @@
   font-family: 'Comic Sans MS', 'Chalkboard', cursive; /* playful font */
   color: #FF69B4; /* bright pink for text */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  animation: pop 0.5s ease-in-out;
   z-index: 1000;
 
   font-size: 2rem;       /* make "Game Over" stand out */
@@ -20,7 +19,6 @@
   text-align: center;  /* ensures text centers in the box */
   white-space: nowrap; /* keeps "Game Over" on one line */
 }
-
 
 .restart-btn {
   padding: 10px 20px;

@@ -7,16 +7,17 @@ type StartButtonProps = {
     onUpdate: (value: number[][]) => void;
     setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
     setBoard: (value: number[][]) => void;
+    setScore: (value: number) => void;
 };
 
-const StartGameButton: React.FC<StartButtonProps> = ({ disabled, onUpdate, setEndGame, setBoard }) => {
+const StartGameButton: React.FC<StartButtonProps> = ({ disabled, onUpdate, setEndGame, setBoard, setScore }) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     var shape = randomShapeGenerator();
 
     onUpdate(shape);
     setEndGame(false);
     setBoard(createBoard());
-    
+    setScore(0);
     };
 
     return (

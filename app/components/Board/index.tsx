@@ -10,11 +10,12 @@ type BoardProps = {
     setShape: (value: number[][]) => void;
     setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
     setBoard: (value: number[][]) => void;
+    setScore: (value: number) => void;
 };
 
 
 
-const Board: React.FC<BoardProps> = ({ board, endGame, setShape, hasInitialized, setEndGame, setBoard}) => {
+const Board: React.FC<BoardProps> = ({ board, endGame, setShape, hasInitialized, setEndGame, setBoard, setScore}) => {
   //re-render the board every time there's an update
   useEffect(() => {
   }, [board, endGame]);
@@ -30,7 +31,7 @@ const Board: React.FC<BoardProps> = ({ board, endGame, setShape, hasInitialized,
           ))}
         </div>
       ))}
-      {endGame && <EndGame onUpdate={setShape} setEndGame={setEndGame} setBoard={setBoard}/>}
+      {endGame && <EndGame onUpdate={setShape} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore}/>}
     </div>
   );
   };

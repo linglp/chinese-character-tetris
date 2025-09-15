@@ -34,13 +34,13 @@ export default function Home() {
   return (
   <div className="app-container">
     <div className="content">
-      <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard}/>
+      <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore}/>
       <div className="main-container">
         <div className="shape-container">
         {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized}/>)}
         </div>
 
-        <Board board={ board } endGame={endGame} setEndGame={setEndGame} setShape={setShape} hasInitialized={hasInitialized} setBoard={setBoard}/>
+        <Board board={ board } endGame={endGame} setEndGame={setEndGame} setShape={setShape} hasInitialized={hasInitialized} setBoard={setBoard} setScore={setScore}/>
       </div>
     </div>
   </div>
