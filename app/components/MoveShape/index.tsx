@@ -67,7 +67,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
         });
         setBoard(newBoard);
         // check if the first row gets filled. If so, set endGame
-        const endGame = ifGameEnd(board);
+        const endGame = ifGameEnd(newBoard);
         if (endGame){
           setEndGame(endGame);
           return
