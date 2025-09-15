@@ -25,5 +25,4 @@ const EndGame: React.FC<EndGameProp> = ({ onUpdate, setEndGame, setBoard, setSco
 }
 
 
-
 export default EndGame;
