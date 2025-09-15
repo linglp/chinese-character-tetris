@@ -6,19 +6,20 @@ import EndGame from "../EndGame"
 type BoardProps = {
     board: number[][];
     endGame: boolean; 
+    hasInitialized: boolean;
     setShape: (value: number[][]) => void;
 };
 
 
 
-const Board: React.FC<BoardProps> = ({ board, endGame, setShape}) => {
+const Board: React.FC<BoardProps> = ({ board, endGame, setShape, hasInitialized}) => {
   //re-render the board every time there's an update
   useEffect(() => {
-  }, [board]);
+  }, [board, endGame]);
 
   return (
     <div className="board">
-      <Timer />
+      <Timer endGame={endGame} hasInitialized={hasInitialized}/>
       {board.map((row, rowIndex) => (
         <div key={rowIndex} className="row">
           {row.map((cell, colIndex) => (

@@ -1,16 +1,23 @@
 import { useState, useEffect } from 'react';
 
-const Timer = () => {
+type TimerProp = {
+  endGame: boolean;
+  hasInitialized: boolean;
+}
+
+const Timer: React.FC<TimerProp>  = ({endGame, hasInitialized}) => {
   const [seconds, setSeconds] = useState(0);
 
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds(prevSeconds => prevSeconds + 1);
+      if (!endGame && hasInitialized){
+        setSeconds(prevSeconds => prevSeconds + 1);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [endGame, hasInitialized]);
 
   return (
     <div className="timer">

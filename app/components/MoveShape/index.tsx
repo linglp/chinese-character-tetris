@@ -12,24 +12,24 @@ type MoveShapeProps = {
   rowLimit: number;
   colLimit: number;
   setBoard: (value: number[][]) => void;
-  setBorderBox: (value: number[][]) => void;
   score: number;
   setScore: (value: number) => void;
   borderBox: number[][];
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
+  hasInitialized: boolean;
+  setHasInitialized: (value: boolean | ((prev: boolean) => boolean)) => void;
 };
 
-const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame}) => {
+const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame, hasInitialized, setHasInitialized}) => {
   //coordinate of shape that is currently being moved
   const [shapeCoordinate, setShapeCoordinate] = useState(mapShapeToPositions(shape));
   const [box, setBorderCoordinate] = useState(saveBox(shape));
-  const [hasInitialized, setHasInitialized] = useState(false);
 
   //after click on "start game"
   //update the board once
   useEffect(() => {
     if (!hasInitialized && shape.length > 0) {
-      console.log('starting again......')
+      console.log("restarting...")
       const nextShape = findNextShape("", shapeCoordinate, box, setBorderCoordinate);
       const {newBoard, shapePos} = updateBoard({board: board, newShape: nextShape});
       setShapeCoordinate(shapePos);

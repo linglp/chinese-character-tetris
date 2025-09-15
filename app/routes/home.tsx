@@ -3,7 +3,6 @@ import type { Route } from "./+types/home";
 import Welcome from "../welcome/welcome";
 import Board from "../components/Board";
 import MoveShape from "../components/MoveShape"
-import EndGame from "../components/EndGame"
 import './home.scss';
 
 
@@ -30,18 +29,17 @@ export default function Home() {
   const [borderBox, setBorderBox] = useState<number[][]>([]);
   const [score, setScore] = useState(0);
   const [endGame, setEndGame] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   return (
   <div>
       <Welcome onUpdate={setShape} score={score}/>
       <div className="main-container">
         <div className="shape-container">
-        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setBorderBox={setBorderBox} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame}/>)}
+        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized}/>)}
         </div>
 
-        <Board board={ board } endGame={endGame}/>
-
-        {/* {endGame && <EndGame onUpdate={setShape} />} */}
+        <Board board={ board } endGame={endGame} setShape={setShape} hasInitialized={hasInitialized}/>
       </div>
   </div>
   );
