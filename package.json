@@ -2,7 +2,7 @@
   "name": "chinese-character-tetris",
   "private": true,
   "type": "module",
-  "homepage": "https://github.com/linglp/chinese-character-tetris",
+  "homepage": "https://linglp.github.io/chinese-character-tetris",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
