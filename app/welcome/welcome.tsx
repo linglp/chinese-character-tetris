@@ -4,9 +4,11 @@ import StartGameButton from "../components/StartGameButton";
 type WelcomeProp = {
   onUpdate: (value: number[][]) => void;
   score: number;
+  setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
+  setBoard: (value: number[][]) => void;
 }
 
-const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score }) => {
+const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard}) => {
   const disabled = false
 
   return (
@@ -22,7 +24,7 @@ const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score }) => {
           </div>
 
           <div>
-            <StartGameButton disabled={disabled} onUpdate={onUpdate} />
+            <StartGameButton disabled={disabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard}/>
           </div>
 
 

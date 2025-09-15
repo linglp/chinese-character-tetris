@@ -4,9 +4,11 @@ import StartGameButton from "../StartGameButton";
 
 type EndGameProp = {
   onUpdate: (value: number[][]) => void;
+  setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
+  setBoard: (value: number[][]) => void;
 }
 
-const EndGame: React.FC<EndGameProp> = ({ onUpdate }) => {
+const EndGame: React.FC<EndGameProp> = ({ onUpdate, setEndGame, setBoard}) => {
   const disabled = false;
 
   return (
@@ -14,7 +16,7 @@ const EndGame: React.FC<EndGameProp> = ({ onUpdate }) => {
       <div>
         <h1>Game Over</h1>
         <div className="restart-btn">
-          <StartGameButton disabled={disabled} onUpdate={onUpdate}/>
+          <StartGameButton disabled={disabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard}/>
         </div>
       </div>
     </div>

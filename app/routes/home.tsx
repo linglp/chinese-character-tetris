@@ -17,11 +17,11 @@ const ROWS = 15;
 const COLS = 10;
 
 // initialize board with 0s (empty cells)
-const createBoard = () => {
+export const createBoard = () => {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 };
 
-const initBoard = createBoard()
+const initBoard = createBoard();
 
 export default function Home() {
   const [randomShape, setShape] = useState<number[][]>([]);
@@ -33,13 +33,13 @@ export default function Home() {
 
   return (
   <div>
-      <Welcome onUpdate={setShape} score={score}/>
+      <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard}/>
       <div className="main-container">
         <div className="shape-container">
         {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized}/>)}
         </div>
 
-        <Board board={ board } endGame={endGame} setShape={setShape} hasInitialized={hasInitialized}/>
+        <Board board={ board } endGame={endGame} setEndGame={setEndGame} setShape={setShape} hasInitialized={hasInitialized} setBoard={setBoard}/>
       </div>
   </div>
   );

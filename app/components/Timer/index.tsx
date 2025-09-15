@@ -14,6 +14,9 @@ const Timer: React.FC<TimerProp>  = ({endGame, hasInitialized}) => {
       if (!endGame && hasInitialized){
         setSeconds(prevSeconds => prevSeconds + 1);
       }
+      else if (endGame){
+        setSeconds(0);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
