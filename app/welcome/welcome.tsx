@@ -7,9 +7,10 @@ type WelcomeProp = {
   score: number;
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
   setBoard: (value: number[][]) => void;
+  setScore: (value: number) => void;
 }
 
-const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard}) => {
+const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard, setScore}) => {
   const disabled = false
 
   return (
@@ -25,7 +26,7 @@ const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard}
           </div>
 
           <div className="start-button">
-            <StartGameButton disabled={disabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard}/>
+            <StartGameButton disabled={disabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore}/>
           </div>
 
 
