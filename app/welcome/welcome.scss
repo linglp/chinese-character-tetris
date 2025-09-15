@@ -1,0 +1,30 @@
+.welcome {
+  text-align: center;
+  font-size: 3rem;
+  color: #FF69B4; /* bright pink for cuteness */
+  margin-bottom: 10px;
+  animation: pop 0.6s ease-out;
+  text-shadow: 2px 2px 0px #F0E6FF, 4px 4px 0px #DCCBFF; /* fun pastel shadow layers */
+  font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+}
+
+
+.score-container {
+  font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+  font-size: 1.8rem;
+  color: #FF69B4; /* pink score number */
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 3px dashed #FFB6C1; /* cute dashed pink border */
+  background-color: rgba(255, 255, 255, 0.6); /* soft translucent white */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: inline-block;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Pop animation for welcome text */
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}

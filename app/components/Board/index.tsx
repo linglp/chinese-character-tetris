@@ -26,7 +26,6 @@ const Board: React.FC<BoardProps> = ({ board, endGame, setShape, hasInitialized,
         <div key={rowIndex} className="row">
           {row.map((cell, colIndex) => (
             <div key={`${rowIndex}_${colIndex}`} className={`cell cell-${cell}`}>
-              {cell}
             </div>
           ))}
         </div>

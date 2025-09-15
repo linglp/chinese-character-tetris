@@ -32,7 +32,8 @@ export default function Home() {
   const [hasInitialized, setHasInitialized] = useState(false);
 
   return (
-  <div>
+  <div className="app-container">
+    <div className="content">
       <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard}/>
       <div className="main-container">
         <div className="shape-container">
@@ -41,6 +42,7 @@ export default function Home() {
 
         <Board board={ board } endGame={endGame} setEndGame={setEndGame} setShape={setShape} hasInitialized={hasInitialized} setBoard={setBoard}/>
       </div>
+    </div>
   </div>
   );
 }

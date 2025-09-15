@@ -1,16 +1,30 @@
 .main-container {
-    position: relative;
-    background: #eee;
-    margin: 10px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    align-items: flex-start;
+    gap: 20px; /* space between shape preview and board */
+}
+
+
+/* Center everything vertically and horizontally */
+.app-container {
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  min-height: 100vh;
+  background-color: #F5E6FF; /* soft pastel background */
+  padding: 20px;
+}
+
+/* Content container for vertical stacking */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* spacing between welcome, score, and board */
+}
 
 .shape-container{
-  position: absolute;
-  top: 0px;                /* place near the top of the cell */
-  left: 50%;               /* move to center horizontally */
-  transform: translateX(-50%); /* shift back by half its width */
-  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
