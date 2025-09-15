@@ -1,7 +1,15 @@
-.start-game-button { 
-    padding: 10px 20px;
-    background-color: lightblue;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
+.start-game-button{
+  padding: 12px 24px;
+  background-color: #CDA4FF; /* cute pastel purple */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.start-game-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
