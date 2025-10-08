@@ -10,7 +10,7 @@ const BackgroundMusic: React.FC<MusicProps> = ({endGame, hasInitialized}) => {
     const audioRef = useRef<HTMLAudioElement>(null);
 
     useEffect(() => {
-        audioRef.current = new Audio("/Yamiyo.mp3");
+        audioRef.current = new Audio("/tetris-game-classic.mp3");
         audioRef.current.loop = true;
         audioRef.current.volume = 0.5;
 
