@@ -4,6 +4,7 @@ import Welcome from "../welcome/welcome";
 import Board from "../components/Board";
 import MoveShape from "../components/MoveShape"
 import './home.scss';
+import BackgroundMusic from "../components/BackgroundMusic"
 
 
 export function meta({}: Route.MetaArgs) {
@@ -41,6 +42,8 @@ export default function Home() {
         </div>
 
         <Board board={ board } endGame={endGame} setEndGame={setEndGame} setShape={setShape} hasInitialized={hasInitialized} setBoard={setBoard} setScore={setScore}/>
+
+        <BackgroundMusic endGame={endGame} hasInitialized={hasInitialized}/>
       </div>
     </div>
   </div>
