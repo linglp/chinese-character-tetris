@@ -37,4 +37,4 @@ const BackgroundMusic: React.FC<MusicProps> = ({endGame, hasInitialized}) => {
     }, [endGame, hasInitialized]);
   return null;
 }
-export default BackgroundMusic
+export default BackgroundMusic;
