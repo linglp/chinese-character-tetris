@@ -1,28 +1,29 @@
 import './index.scss';
 import React, { useEffect } from 'react';
-import Timer from '../Timer';
 import EndGame from "../EndGame"
 
 type BoardProps = {
     board: number[][];
+    isDisabled: boolean;
     endGame: boolean; 
-    hasInitialized: boolean;
     setShape: (value: number[][]) => void;
     setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
     setBoard: (value: number[][]) => void;
     setScore: (value: number) => void;
+    setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
 };
 
 
 
-const Board: React.FC<BoardProps> = ({ board, endGame, setShape, hasInitialized, setEndGame, setBoard, setScore}) => {
-  //re-render the board every time there's an update
+const Board: React.FC<BoardProps> = ({ board, isDisabled, endGame, setShape, setEndGame, setBoard, setScore, setIsDisabled}) => {
   useEffect(() => {
-  }, [board, endGame]);
+    if (endGame) {
+      setIsDisabled(false); // Enable the button when game ends
+    }
+  }, [board, endGame, setIsDisabled]);
 
   return (
     <div className="board">
-      <Timer endGame={endGame} hasInitialized={hasInitialized}/>
       {board.map((row, rowIndex) => (
         <div key={rowIndex} className="row">
           {row.map((cell, colIndex) => (
@@ -31,7 +32,7 @@ const Board: React.FC<BoardProps> = ({ board, endGame, setShape, hasInitialized,
           ))}
         </div>
       ))}
-      {endGame && <EndGame onUpdate={setShape} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore}/>}
+      {endGame && <EndGame isDisabled={isDisabled} onUpdate={setShape} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled}/>}
     </div>
   );
   };
