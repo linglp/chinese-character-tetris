@@ -1,7 +1,7 @@
 .board {
     display: grid;
     position: relative;
-    grid-template-columns: repeat(auto, 35px); /* Bigger cells */
+    grid-template-columns: repeat(auto-fill, 35px); /* Bigger cells */
     grid-auto-rows: 35px;        /* Bigger cells */
     gap: 0px; //gap between rows in the board;
     margin: 0 auto;
