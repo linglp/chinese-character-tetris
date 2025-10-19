@@ -20,7 +20,7 @@ const Board: React.FC<BoardProps> = ({ board, isDisabled, endGame, setShape, set
     if (endGame) {
       setIsDisabled(false); // Enable the button when game ends
     }
-  }, [board, endGame, setIsDisabled]);
+  }, [endGame, setIsDisabled]);
 
   return (
     <div className="board">
