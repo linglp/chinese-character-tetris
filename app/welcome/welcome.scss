@@ -1,33 +1,23 @@
 .welcome {
   text-align: center;
-  font-size: clamp(1.5rem, 3vw, 2rem); /* Smaller responsive font size */
+  font-size: 3rem;
   color: #FF69B4; /* bright pink for cuteness */
-  margin-bottom: 5px; /* Reduced margin */
+  margin-bottom: 10px;
   animation: pop 0.6s ease-out;
   text-shadow: 2px 2px 0px #F0E6FF, 4px 4px 0px #DCCBFF; /* fun pastel shadow layers */
   font-family: 'Comic Sans MS', 'Chalkboard', cursive;
 }
 
 
-/* Container to hold score and timer horizontally */
-.stats-container {
-  display: flex;
-  gap: 15px; /* Reduced gap */
-  justify-content: center;
-  align-items: center;
-  margin: 5px 0; /* Reduced margin */
-}
-
-.score-container,
-.timer-container {
+.score-container {
   font-family: 'Comic Sans MS', 'Chalkboard', cursive;
-  font-size: 1.2rem; /* Smaller font */
-  color: #FF69B4; /* pink number */
-  padding: 6px 12px; /* Smaller padding */
-  border-radius: 8px; /* Smaller border radius */
-  border: 2px dashed #FFB6C1; /* Thinner border */
+  font-size: 1.8rem;
+  color: #FF69B4; /* pink score number */
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 3px dashed #FFB6C1; /* cute dashed pink border */
   background-color: rgba(255, 255, 255, 0.6); /* soft translucent white */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Smaller shadow */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   display: inline-block;
   transition: transform 0.2s, box-shadow 0.2s;
 }
