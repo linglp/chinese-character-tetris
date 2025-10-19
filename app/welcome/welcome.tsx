@@ -18,9 +18,9 @@ type WelcomeProp = {
 const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard, setScore, endGame, hasInitialized, setIsDisabled, isDisabled }) => {
 
   return (
-    <div className="flex items-center justify-center p-2">
-      <div className="flex flex-col items-center gap-4 max-w-full">
-        <div className="flex flex-col items-center gap-3 w-[500px] max-w-[100vw]">
+    <div className="flex items-center justify-center p-1">
+      <div className="flex flex-col items-center gap-2 max-w-full">
+        <div className="flex flex-col items-center gap-2 w-[400px] max-w-[100vw]">
           <div className="welcome">
             Welcome to tetris!
           </div>
