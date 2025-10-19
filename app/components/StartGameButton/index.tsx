@@ -1,5 +1,4 @@
 import './index.scss';
-import { useState } from 'react';
 import { randomShapeGenerator } from '../Shape/util';
 import {createBoard} from '../../routes/home'
 
