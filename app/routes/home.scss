@@ -1,7 +1,8 @@
 .main-container {
     display: flex;
     align-items: flex-start;
-    gap: 20px; /* space between shape preview and board */
+    gap: 15px; /* Reduced space between shape preview and board */
+    max-height: 60vh; /* Limit height to fit with welcome section */
 }
 
 
@@ -11,8 +12,10 @@
   justify-content: center; /* horizontal center */
   align-items: center;     /* vertical center */
   min-height: 100vh;
+  max-height: 100vh;      /* Prevent exceeding viewport */
   background-color: #F5E6FF; /* soft pastel background */
-  padding: 20px;
+  padding: 10px;
+  overflow: hidden;       /* Prevent scrolling */
 }
 
 /* Content container for vertical stacking */
@@ -20,7 +23,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px; /* spacing between welcome, score, and board */
+  gap: 10px; /* Reduced spacing between welcome and board */
+  max-height: 100%;
+  width: 100%;
 }
 
 .shape-container{

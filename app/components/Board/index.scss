@@ -1,18 +1,19 @@
 .board {
     display: grid;
     position: relative;
-    grid-template-columns: repeat(auto, 30px);
-    grid-auto-rows: 30px;        
+    grid-template-columns: repeat(auto, 25px); /* Smaller cells */
+    grid-auto-rows: 25px;        /* Smaller cells */
     gap: 0px; //gap between rows in the board;
     margin: 0 auto;
     background-color: #E6E0FF; //light purple
     border-radius: 12px;  
-    max-width: 900px;
+    max-width: 700px; /* Smaller max width */
     justify-content: center;  /* Center horizontally */
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     align-items: center;      /* Center vertically (within available height) */
     height:fit-content;
     width: fit-content;
+    max-height: 50vh; /* Limit board height */
   }
 
   
@@ -21,8 +22,8 @@
   }
   
   .cell {
-    width: 30px;
-    height: 30px; 
+    width: 25px;  /* Smaller cells */
+    height: 25px; /* Smaller cells */
     display: flex;
     border: 2px solid white;   /* thick white lines */
     border-radius: 6px;        /* rounded edges */
