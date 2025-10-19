@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { updateBoard, cleanUpBoard } from '../Board/util'
-import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox, clearBoardCountScore, ifGameEnd} from './util';
+import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox, clearBoardCountScore, ifGameEnd, playButtonMovingSound} from './util';
 import { randomShapeGenerator } from '../Shape/util';
 
 
@@ -89,7 +89,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
 
     const handleKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
-      
+      playButtonMovingSound(e.key);
       const nextShape = findNextShape(e.key, shapeCoordinate, box, setBorderCoordinate);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
       const cleanedBoard = cleanUpBoard({board, shapeCoordinate});

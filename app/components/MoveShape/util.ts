@@ -272,3 +272,11 @@ export function ifGameEnd(board: number[][]){
   let hasOne = board[0].some(cell => cell === 1);
   return hasOne
 }
+
+
+export function playButtonMovingSound(activity: string){
+  if (activity === 'ArrowLeft' || activity === 'ArrowRight') {
+    const audio = new Audio('/left-right-button.wav');
+    audio.play();
+  }
+}
