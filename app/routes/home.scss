@@ -1,7 +1,9 @@
 .main-container {
     display: flex;
     align-items: flex-start;
-    gap: 20px; /* space between shape preview and board */
+    gap: 20px; /* Space between shape preview and board */
+    max-height: 75vh; /* More space for the game */
+    justify-content: center; /* Center the game area */
 }
 
 
@@ -11,8 +13,10 @@
   justify-content: center; /* horizontal center */
   align-items: center;     /* vertical center */
   min-height: 100vh;
+  max-height: 100vh;      /* Prevent exceeding viewport */
   background-color: #F5E6FF; /* soft pastel background */
-  padding: 20px;
+  padding: 5px;          /* Minimal padding */
+  overflow: hidden;       /* Prevent scrolling */
 }
 
 /* Content container for vertical stacking */
@@ -20,7 +24,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px; /* spacing between welcome, score, and board */
+  gap: 5px; /* Minimal gap - compact layout */
+  max-height: 100%;
+  width: 100%;
 }
 
 .shape-container{

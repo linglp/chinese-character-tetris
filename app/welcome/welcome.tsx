@@ -1,39 +1,45 @@
 import StartGameButton from "../components/StartGameButton";
 import './welcome.scss';
+import Timer from '../components/Timer';
 
 // Define the type for the props
 type WelcomeProp = {
   onUpdate: (value: number[][]) => void;
   score: number;
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
+  endGame: boolean;
+  hasInitialized: boolean;
   setBoard: (value: number[][]) => void;
   setScore: (value: number) => void;
+  isDisabled: boolean;
+  setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
 }
 
-const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard, setScore}) => {
-  const disabled = false
+const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard, setScore, endGame, hasInitialized, setIsDisabled, isDisabled }) => {
 
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <header className="flex flex-col items-start gap-5 w-[500px] max-w-[100vw] p-4">
+    <div className="flex items-center justify-center p-1">
+      <div className="flex flex-col items-center gap-2 max-w-full">
+        <div className="flex flex-col items-center gap-2 w-[400px] max-w-[100vw]">
           <div className="welcome">
             Welcome to tetris!
           </div>
 
-          <div className="score-container">
-            Score: {score}
+          <div className="stats-container">
+            <div className="score-container">
+              Score: {score}
+            </div>
+            <div className="timer-container">
+              <Timer endGame={endGame} hasInitialized={hasInitialized} />
+            </div>
           </div>
 
           <div className="start-button">
-            <StartGameButton disabled={disabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore}/>
+            <StartGameButton isDisabled={isDisabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled}/>
           </div>
-
-
-
-        </header>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
 
