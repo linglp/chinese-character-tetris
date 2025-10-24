@@ -25,8 +25,8 @@ export const createBoard = () => {
 const initBoard = createBoard();
 
 export default function Home() {
-  const [randomShape, setShape] = useState<number[][]>([]);
-  const [board, setBoard] = useState<number[][]>(initBoard);
+  const [randomShape, setShape] = useState<(string | number)[][]>([]);
+  const [board, setBoard] = useState<(string | number)[][]>(initBoard);
   const [borderBox, setBorderBox] = useState<number[][]>([]);
   const [score, setScore] = useState(0);
   const [endGame, setEndGame] = useState(false);

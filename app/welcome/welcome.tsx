@@ -4,19 +4,18 @@ import Timer from '../components/Timer';
 
 // Define the type for the props
 type WelcomeProp = {
-  onUpdate: (value: number[][]) => void;
+  onUpdate: (value: (string | number)[][]) => void;
   score: number;
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
   endGame: boolean;
   hasInitialized: boolean;
-  setBoard: (value: number[][]) => void;
+  setBoard: (value: (string | number)[][]) => void;
   setScore: (value: number) => void;
   isDisabled: boolean;
   setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
 }
 
 const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard, setScore, endGame, hasInitialized, setIsDisabled, isDisabled }) => {
-
   return (
     <div className="flex items-center justify-center p-1">
       <div className="flex flex-col items-center gap-2 max-w-full">

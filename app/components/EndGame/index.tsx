@@ -4,9 +4,9 @@ import StartGameButton from "../StartGameButton";
 
 type EndGameProp = {
   isDisabled: boolean;
-  onUpdate: (value: number[][]) => void;
+  onUpdate: (value: (string | number)[][]) => void;
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
-  setBoard: (value: number[][]) => void;
+  setBoard: (value: (string | number)[][]) => void;
   setScore: (value: number) => void;
   setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
 }
