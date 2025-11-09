@@ -111,10 +111,12 @@ export function findNextShape(activity: string, shapeCoordinate: shapePositionTy
     newBox = moveDown(box);
   }
   else if (activity == 'ArrowUp'){
+    // Rotation happens within the fixed 3×3 box
+    // Box coordinates don't change, only the shape positions change
     moved = rotateShape(shapeCoordinate, box);
-
+    // newBox stays as the original box
   }
-  return [moved, newBox]
+  return [moved, newBox];
 }
 
 /**

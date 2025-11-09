@@ -35,6 +35,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       setShapeCoordinate(shapePos);
       setBoard(newBoard);
       setHasInitialized(true); // ensure it only runs once
+      setBorderCoordinate(newBox);
     }
   }, [shape, hasInitialized, box]);
 
