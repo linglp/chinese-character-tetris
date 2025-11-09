@@ -30,7 +30,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
   useEffect(() => {
     if (!hasInitialized && shape.length > 0) {
       console.log("restarting...")
-      const nextShape = findNextShape("", shapeCoordinate, box, setBorderCoordinate);
+      const [nextShape, newBox] = findNextShape("", shapeCoordinate, box);
       const {newBoard, shapePos} = updateBoard({board: board, newShape: nextShape});
       setShapeCoordinate(shapePos);
       setBoard(newBoard);
@@ -46,7 +46,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
     let intervalId: NodeJS.Timeout;
 
     intervalId = setInterval(() => {
-      const nextShape = findNextShape("ArrowDown", shapeCoordinate, box, setBorderCoordinate);
+      const [nextShape, newBox] = findNextShape("ArrowDown", shapeCoordinate, box);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
       const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
       const Occupied = ifOccupy({nextShape, board: cleanedBoard});
@@ -57,6 +57,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           newShape: nextShape,
         });
         setBoard(newBoard);
+        setBorderCoordinate(newBox);
         setShapeCoordinate(shapePos);
       }
       else {
@@ -90,7 +91,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
     const handleKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
       playButtonMovingSound(e.key);
-      const nextShape = findNextShape(e.key, shapeCoordinate, box, setBorderCoordinate);
+      const [nextShape, newBox] = findNextShape(e.key, shapeCoordinate, box);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
       const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
       const Occupied = ifOccupy({nextShape, board: cleanedBoard});
@@ -99,6 +100,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       const {newBoard, shapePos} = updateBoard({board:cleanedBoard, newShape: nextShape});
       setBoard(newBoard);
       setShapeCoordinate(shapePos);
+      setBorderCoordinate(newBox);
       }
 
     };
