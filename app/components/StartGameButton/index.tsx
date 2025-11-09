@@ -12,27 +12,9 @@ type StartButtonProps = {
 };
 
 const StartGameButton: React.FC<StartButtonProps> = ({ onUpdate, setEndGame, setBoard, setScore, setIsDisabled, isDisabled }) => {
-    const words = loadWords();
-    // var shape = randomShapeGenerator(words);
-    var shape = [
-    [
-        "菊",
-        "菠",
-        0
-    ],
-    [
-        0,
-        "粥",
-        "柿"
-    ],
-    [
-        0,
-        0,
-        0
-    ]
-]
-    console.log('shape', shape)
+    const [words, phrases] = loadWords();
 
+    var shape = randomShapeGenerator(words);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 
     onUpdate(shape);

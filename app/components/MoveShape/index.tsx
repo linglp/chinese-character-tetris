@@ -18,10 +18,11 @@ type MoveShapeProps = {
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
   hasInitialized: boolean;
   setHasInitialized: (value: boolean | ((prev: boolean) => boolean)) => void;
+  setFood: (value: (string)[]) => void;
 };
 
-const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame, hasInitialized, setHasInitialized}) => {
-  const words = loadWords();
+const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame, hasInitialized, setHasInitialized, setFood}) => {
+  const [words, phrases] = loadWords();
 
   //coordinate of shape that is currently being moved
   const [shapeCoordinate, setShapeCoordinate] = useState(mapShapeToPositions(shape));
@@ -76,9 +77,11 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           return
         }
         // also calculate if a shape needs to be cleared
-        const [newScore, updatedBoard] = clearBoardCountScore(newBoard, score);
+        console.log('phrases:', phrases);
+        const [newScore, updatedBoard, foundPhrases] = clearBoardCountScore(newBoard, score, phrases);
         setScore(newScore);
         setBoard(updatedBoard);
+        setFood(foundPhrases);
 
         // restart a new shape
         var newShape = randomShapeGenerator(words)

@@ -32,6 +32,7 @@ export default function Home() {
   const [endGame, setEndGame] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [food, setFood] = useState<(string)[]>([]);
 
   return (
   <div className="app-container">
@@ -39,10 +40,19 @@ export default function Home() {
       <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} endGame={endGame} hasInitialized={hasInitialized} isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
       <div className="main-container">
         <div className="shape-container">
-        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized}/>)}
+        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized} setFood={setFood}/>)}
         </div>
 
         <Board board={board} endGame={endGame} setEndGame={setEndGame} setShape={setShape} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled} isDisabled={isDisabled}/>
+
+        <div className="food-container">
+          <div className="food-header">Food collected</div>
+          {food.map((item, index) => (
+            <div key={index} className="food-item">
+              {item}
+            </div>
+          ))}
+        </div>
 
         <BackgroundMusic endGame={endGame} hasInitialized={hasInitialized}/>
       </div>
