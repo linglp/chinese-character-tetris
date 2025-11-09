@@ -114,7 +114,7 @@ export function findNextShape(activity: string, shapeCoordinate: shapePositionTy
     moved = rotateShape(shapeCoordinate, box);
 
   }
-  return [moved, newBox]
+  return [moved, newBox];
 }
 
 /**
