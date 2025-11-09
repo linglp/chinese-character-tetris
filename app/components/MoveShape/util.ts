@@ -88,10 +88,9 @@ export function findOccupant(nextShape: shapePositionType[], board: number[][]):
  * @param {string} activity - The action to perform (e.g., 'ArrowDown', 'ArrowLeft', 'ArrowRight').
  * @param {shapePositionType[]} shapeCoordinate - Current coordinates of the shape (each with row and col).
  * @param {shapePositionType[]} box - The bounding box of the current shape.
- * @param {(value: shapePositionType[]) => void} setBorderBoxCoordinate - Callback to update the border box coordinates.
  * @returns {shapePositionType[]} New coordinates of the shape after movement
  */
-export function findNextShape(activity: string, shapeCoordinate: shapePositionType[], box: shapePositionType[], setBorderBoxCoordinate:(value: shapePositionType[]) => void): shapePositionType[]{
+export function findNextShape(activity: string, shapeCoordinate: shapePositionType[], box: shapePositionType[]): [shapePositionType[], shapePositionType[]] {
   const moveLeft =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]-1 }));
   const moveRight =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"], "col": p["col"]+1 }));
   const moveDown =  (points: shapePositionType[]) => points.map(p => ({ "row": p["row"]+1, "col": p["col"] }));
@@ -112,10 +111,12 @@ export function findNextShape(activity: string, shapeCoordinate: shapePositionTy
     newBox = moveDown(box);
   }
   else if (activity == 'ArrowUp'){
+    // Rotation happens within the fixed 3×3 box
+    // Box coordinates don't change, only the shape positions change
     moved = rotateShape(shapeCoordinate, box);
+    // newBox stays as the original box
   }
-  setBorderBoxCoordinate(newBox);
-  return moved
+  return [moved, newBox];
 }
 
 /**
