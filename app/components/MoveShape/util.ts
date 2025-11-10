@@ -15,7 +15,6 @@ type findNextShapeParams = {
   activity: string;
   shapeCoordinate: shapePositionWithValueType[];
   box: shapePositionType[];
-  setBorderBoxCoordinate: (value: shapePositionType[]) => void;
 }
 
 /**
@@ -89,10 +88,9 @@ export function findOccupant(nextShape: shapePositionWithValueType[], board: (st
  * @param {string} params.activity - The action to perform (e.g., 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp').
  * @param {shapePositionWithValueType[]} params.shapeCoordinate - Current coordinates of the shape (each with row and col).
  * @param {shapePositionType[]} params.box - The bounding box of the current shape.
- * @param {(value: shapePositionWithValueType[]) => void} params.setBorderBoxCoordinate - Callback to update the border box coordinates.
  * @returns {shapePositionWithValueType[]} New coordinates of the shape after movement
  */
-export function findNextShape({activity, shapeCoordinate, box, setBorderBoxCoordinate}: findNextShapeParams): shapePositionWithValueType[]{
+export function findNextShape({activity, shapeCoordinate, box}: findNextShapeParams): [shapePositionWithValueType[], shapePositionType[]]{
   const moveLeft = <T extends shapePositionType | shapePositionWithValueType>(points: T[]): T[] =>points.map(p => ({...p,col: p.col - 1,}));
   const moveRight = <T extends shapePositionType | shapePositionWithValueType>(points: T[]): T[] =>points.map(p => ({...p,col: p.col + 1,}));
   const moveDown= <T extends shapePositionType | shapePositionWithValueType>(points: T[]): T[] =>points.map(p => ({...p,row: p.row + 1,}));
@@ -114,12 +112,12 @@ export function findNextShape({activity, shapeCoordinate, box, setBorderBoxCoord
     newBox = moveDown(box);
   }
   else if (activity == 'ArrowUp'){
+    // Rotation happens within the fixed 3×3 box
+    // Box coordinates don't change, only the shape positions change
     moved = rotateShape(shapeCoordinate, box);
+    // newBox stays as the original box
   }
-
-  setBorderBoxCoordinate(newBox);
-  
-  return moved
+  return [moved, newBox];
 }
 
 /**
@@ -302,4 +300,11 @@ function makeWords(arr: (string | number)[], phrases: Record<string, string>): s
         i++;
     }
     return results;
+}
+
+export function playButtonMovingSound(activity: string){
+  if (activity === 'ArrowLeft' || activity === 'ArrowRight') {
+    const audio = new Audio('/left-right-button.wav');
+    audio.play();
+  }
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { updateBoard, cleanUpBoard } from '../Board/util'
-import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox, clearBoardCountScore, ifGameEnd} from './util';
-import { randomShapeGenerator, loadWords } from '../Shape/util';
+import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox, clearBoardCountScore, ifGameEnd, playButtonMovingSound} from './util';
+import { randomShapeGenerator} from '../Shape/util';
 
 
 type MoveShapeProps = {
@@ -19,11 +19,11 @@ type MoveShapeProps = {
   hasInitialized: boolean;
   setHasInitialized: (value: boolean | ((prev: boolean) => boolean)) => void;
   setFood: (value: (string)[]) => void;
+  words: any[];
+  phrases: Record<string, string>;
 };
 
-const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame, hasInitialized, setHasInitialized, setFood}) => {
-  const [words, phrases] = loadWords();
-
+const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame, hasInitialized, setHasInitialized, setFood, words, phrases}) => {
   //coordinate of shape that is currently being moved
   const [shapeCoordinate, setShapeCoordinate] = useState(mapShapeToPositions(shape));
   const [box, setBorderCoordinate] = useState(saveBox(shape));
@@ -33,11 +33,12 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
   useEffect(() => {
     if (!hasInitialized && shape.length > 0) {
       console.log("restarting...")
-      const nextShape = findNextShape({activity: "", shapeCoordinate: shapeCoordinate, box: box, setBorderBoxCoordinate: setBorderCoordinate});
+      const [nextShape, newBox] = findNextShape({activity: "", shapeCoordinate: shapeCoordinate, box: box});
       const {newBoard, shapePos} = updateBoard({board: board, newShape: nextShape});
       setShapeCoordinate(shapePos);
       setBoard(newBoard);
       setHasInitialized(true); // ensure it only runs once
+      setBorderCoordinate(newBox);
     }
   }, [shape, hasInitialized, box]);
 
@@ -50,63 +51,83 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
     let intervalId: NodeJS.Timeout;
 
     intervalId = setInterval(() => {
-      const nextShape = findNextShape({activity: "ArrowDown", shapeCoordinate: shapeCoordinate, box: box, setBorderBoxCoordinate: setBorderCoordinate});
+      const [nextShape, newBox] = findNextShape({activity: "ArrowDown", shapeCoordinate: shapeCoordinate, box: box});
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
-      const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
-      const Occupied = ifOccupy({nextShape, board: cleanedBoard});
 
-      if (inBorder && !Occupied) {
-        const { newBoard, shapePos } = updateBoard({
-          board: cleanedBoard,
-          newShape: nextShape,
-        });
-        setBoard(newBoard);
-        setShapeCoordinate(shapePos);
-      }
-      else {
-        // the shape becomes part of the board
-        const { newBoard, shapePos} = updateBoard({
-          board: board,
-          newShape: shapeCoordinate,
-        });
-        setBoard(newBoard);
-        // check if the first row gets filled. If so, set endGame
-        const endGame = ifGameEnd(newBoard);
-        if (endGame){
-          setEndGame(endGame);
-          return
+      //For auto movement, if in border, clean up the board
+      //Then check if occupied. If not occupied, apply the move
+      //If can't move down either because of out of border or occupied, lock the piece
+      
+      if (inBorder) {
+        const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
+        const Occupied = ifOccupy({nextShape, board: cleanedBoard});
+        
+        if (!Occupied) {
+          // Valid move: move the piece down
+          const { newBoard, shapePos } = updateBoard({
+            board: cleanedBoard,
+            newShape: nextShape,
+          });
+          setBoard(newBoard);
+          setBorderCoordinate(newBox);
+          setShapeCoordinate(shapePos);
+          return; // Exit early but do not lock the piece to the board
         }
-        // also calculate if a shape needs to be cleared
-        console.log('phrases:', phrases);
-        const [newScore, updatedBoard, foundPhrases] = clearBoardCountScore(newBoard, score, phrases);
-        setScore(newScore);
-        setBoard(updatedBoard);
-        setFood(foundPhrases);
 
-        // restart a new shape
-        var newShape = randomShapeGenerator(words)
-        setShape(newShape);
-        setBorderCoordinate(saveBox(newShape));
-        setShapeCoordinate(mapShapeToPositions(newShape))
-        setHasInitialized(false);
+          // Can't move down (either out of border OR occupied)
+          // Lock the shape in place
+          const { newBoard, shapePos} = updateBoard({
+            board: board,
+            newShape: shapeCoordinate,
+          });
+          setBoard(newBoard);
+          
+          // check if the first row gets filled. If so, set endGame
+          const endGame = ifGameEnd(newBoard);
+          if (endGame){
+            setEndGame(endGame);
+            return
+          }
+          
+          // also calculate if a shape needs to be cleared
+          const [newScore, updatedBoard, foundPhrases] = clearBoardCountScore(newBoard, score, phrases);
+          setScore(newScore);
+          setBoard(updatedBoard);
+          setFood(foundPhrases);
+
+          // restart a new shape
+          var newShape = randomShapeGenerator(words);
+          setShape(newShape);
+          setBorderCoordinate(saveBox(newShape));
+          setShapeCoordinate(mapShapeToPositions(newShape))
+          setHasInitialized(false);
       }
+      
+      // Can't move down (either out of border OR occupied)
+
     }, 1000);
 
 
     const handleKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
 
-      const nextShape = findNextShape({activity: e.key, shapeCoordinate: shapeCoordinate, box: box, setBorderBoxCoordinate: setBorderCoordinate});
+      const [nextShape, newBox] = findNextShape({activity: e.key, shapeCoordinate: shapeCoordinate, box: box});
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
-      const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
-      const Occupied = ifOccupy({nextShape, board: cleanedBoard});
 
-      if (inBorder && !Occupied){
-      const {newBoard, shapePos} = updateBoard({board:cleanedBoard, newShape: nextShape});
-      setBoard(newBoard);
-      setShapeCoordinate(shapePos);
+      //For manual movement, if in border, clean up the board
+      //Then check if occupied. If not occupied, apply the move
+      //If out of border or occupied, do nothing
+      if (inBorder) {
+        const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
+        const Occupied = ifOccupy({nextShape, board: cleanedBoard});
+        
+        if (!Occupied) {
+          const {newBoard, shapePos} = updateBoard({board:cleanedBoard, newShape: nextShape});
+          setBoard(newBoard);
+          setShapeCoordinate(shapePos);
+          setBorderCoordinate(newBox);
+        }
       }
-
     };
       window.addEventListener('keydown', handleKeyDown);
       return () => {
