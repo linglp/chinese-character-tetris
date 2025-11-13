@@ -1,5 +1,5 @@
 import './index.scss';
-import { randomShapeGenerator, loadWords } from '../Shape/util';
+import { randomShapeGenerator} from '../Shape/util';
 import {createBoard} from '../../routes/home'
 
 type StartButtonProps = {
@@ -9,20 +9,18 @@ type StartButtonProps = {
     setBoard: (value: (string | number)[][]) => void;
     setScore: (value: number) => void;
     setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
+    words: any[];
 };
 
-const StartGameButton: React.FC<StartButtonProps> = ({ onUpdate, setEndGame, setBoard, setScore, setIsDisabled, isDisabled }) => {
-    const [words, phrases] = loadWords();
-
-    var shape = randomShapeGenerator(words);
+const StartGameButton: React.FC<StartButtonProps> = ({ onUpdate, setEndGame, setBoard, setScore, setIsDisabled, isDisabled, words }) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-
-    onUpdate(shape);
-    setEndGame(false);
-    setBoard(createBoard());
-    setScore(0);
-    setIsDisabled(true);
-
+        // Now use the words that were loaded
+        var shape = randomShapeGenerator(words);
+        onUpdate(shape);
+        setEndGame(false);
+        setBoard(createBoard());
+        setScore(0);
+        setIsDisabled(true);
     };
 
     return (
@@ -32,4 +30,4 @@ const StartGameButton: React.FC<StartButtonProps> = ({ onUpdate, setEndGame, set
     )
 }
 
-export default StartGameButton
+export default StartGameButton;

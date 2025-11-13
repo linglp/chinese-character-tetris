@@ -242,11 +242,16 @@ function generateRandomCharacter(charArr: string[]): string {
 }
 
 function addCharacterToShape(charArr: string[], shape: number[][]): (string | number)[][] {
+    console.log('charArr in addCharacterToShape', charArr)
     const shapeWithCharacter: (string | number)[][] = shape.map(row => [...row]);
 
     for (let i = 0; i < shape.length; i++) {
         for (let j = 0; j < shape[i].length; j++) {
             if (shape[i][j] === 1) {
+                if (charArr == undefined){
+                    console.log('charArr is undefined');
+                    charArr = ["汉","字"];
+                }
                 var character = generateRandomCharacter(charArr);
                 shapeWithCharacter[i][j] = character;
             }
@@ -256,17 +261,23 @@ function addCharacterToShape(charArr: string[], shape: number[][]): (string | nu
 }
 
 
-export function loadWords() {
+export function loadWords(): [any[], Record<string, string>] {
   const [words, setWords] = useState<any[]>([]);
+  const [phrases, setPhrases] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetch("/words.json")
       .then((res) => res.json())
       .then((data) => setWords(data))
       .catch((err) => console.error("Error loading words.json:", err));
-  }, []); // runs once on mount
 
-  return words;
+    fetch("/vocabulary.json")
+      .then((res) => res.json())
+      .then((data) => setPhrases(data))
+      .catch((err) => console.error("Error loading vocabulary.json:", err));
+  }, []); //run once
+
+  return [words, phrases];
 }
 
 export function randomShapeGenerator(words: any[]): (string | number)[][] {

@@ -57,10 +57,12 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       //For auto movement, if in border, clean up the board
       //Then check if occupied. If not occupied, apply the move
       //If can't move down either because of out of border or occupied, lock the piece
+      console.log('Auto move down: inBorder=', inBorder);
       
       if (inBorder) {
         const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
         const Occupied = ifOccupy({nextShape, board: cleanedBoard});
+        console.log('Auto move down: Occupied=', Occupied);
         
         if (!Occupied) {
           // Valid move: move the piece down
@@ -73,6 +75,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           setShapeCoordinate(shapePos);
           return; // Exit early but do not lock the piece to the board
         }
+      }
 
           // Can't move down (either out of border OR occupied)
           // Lock the shape in place
@@ -101,11 +104,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           setBorderCoordinate(saveBox(newShape));
           setShapeCoordinate(mapShapeToPositions(newShape))
           setHasInitialized(false);
-      }
-      
-      // Can't move down (either out of border OR occupied)
-
-    }, 1000);
+      }, 1000);
 
 
     const handleKeyDown = (e: KeyboardEvent) => {

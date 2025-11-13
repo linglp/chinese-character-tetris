@@ -13,9 +13,10 @@ type WelcomeProp = {
   setScore: (value: number) => void;
   isDisabled: boolean;
   setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
+  words: any[];
 }
 
-const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard, setScore, endGame, hasInitialized, setIsDisabled, isDisabled }) => {
+const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard, setScore, endGame, hasInitialized, setIsDisabled, isDisabled, words }) => {
   return (
     <div className="flex items-center justify-center p-1">
       <div className="flex flex-col items-center gap-2 max-w-full">
@@ -34,7 +35,7 @@ const Welcome: React.FC<WelcomeProp> = ({ onUpdate, score, setEndGame, setBoard,
           </div>
 
           <div className="start-button">
-            <StartGameButton isDisabled={isDisabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled}/>
+            <StartGameButton isDisabled={isDisabled} onUpdate={onUpdate} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled} words={words}/>
           </div>
         </div>
       </div>

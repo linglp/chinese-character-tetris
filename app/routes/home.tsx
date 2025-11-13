@@ -5,6 +5,8 @@ import Board from "../components/Board";
 import MoveShape from "../components/MoveShape"
 import './home.scss';
 import BackgroundMusic from "../components/BackgroundMusic"
+import { loadWords } from "../components/Shape/util";
+
 
 
 export function meta({}: Route.MetaArgs) {
@@ -25,6 +27,9 @@ export const createBoard = () => {
 const initBoard = createBoard();
 
 export default function Home() {
+    // Load words ONCE at the top level
+  const [words, phrases] = loadWords();
+  
   const [randomShape, setShape] = useState<(string | number)[][]>([]);
   const [board, setBoard] = useState<(string | number)[][]>(initBoard);
   const [borderBox, setBorderBox] = useState<number[][]>([]);
@@ -37,10 +42,10 @@ export default function Home() {
   return (
   <div className="app-container">
     <div className="content">
-      <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} endGame={endGame} hasInitialized={hasInitialized} isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
+      <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} endGame={endGame} hasInitialized={hasInitialized} isDisabled={isDisabled} setIsDisabled={setIsDisabled} words={words}/>
       <div className="main-container">
         <div className="shape-container">
-        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized} setFood={setFood}/>)}
+        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized} setFood={setFood} words={words} phrases={phrases}/>)}
         </div>
 
         <Board board={board} endGame={endGame} setEndGame={setEndGame} setShape={setShape} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled} isDisabled={isDisabled}/>
