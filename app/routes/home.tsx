@@ -37,7 +37,7 @@ export default function Home() {
   const [endGame, setEndGame] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [food, setFood] = useState<(string)[]>([]);
+  const [food, setFood] = useState<(Record<string, string>)[]>([]);
 
   return (
   <div className="app-container">
@@ -54,7 +54,8 @@ export default function Home() {
           <div className="food-header">Food collected</div>
           {food.map((item, index) => (
             <div key={index} className="food-item">
-              {item}
+              <div className="food-word">{item.word}</div>
+              <div className="food-explanation">{item.explanation}</div>
             </div>
           ))}
         </div>

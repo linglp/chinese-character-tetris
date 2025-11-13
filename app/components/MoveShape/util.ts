@@ -234,15 +234,15 @@ export function saveBox(matrix: (string | number)[][]): shapePositionType[] {
  *
  * @param {number[][]} board - The current game board, represented as a 2D array of numbers.
  * @param {number} score - The current score before clearing any rows.
- * @params {string[][]} phrases - The list of valid phrases for scoring.
+ * @param {Record<string, string>} phrases - The list of valid phrases for scoring.
  * @returns {[number, number[][]]} - A tuple containing:
  *    1. The updated score.
  *    2. The updated board after clearing filled rows.
  */
-export function clearBoardCountScore(board: (string | number)[][], score: number, phrases: Record<string, string>): [number, (string | number)[][], string[]]{
+export function clearBoardCountScore(board: (string | number)[][], score: number, phrases: Record<string, string>): [number, (string | number)[][], Record<string, string>[]]{
   const rowsToClear: number[] = [];
   const newBoard = board.map(row => [...row]);
-  const foundWords: string[] = [];
+  const foundWords: Record<string, string>[] = [];
 
   for (let i = 0; i < board.length; i++) {
     const allFilled = <T>(arr: T[]): boolean => arr.every(val => typeof val === 'string');
@@ -279,21 +279,21 @@ export function ifGameEnd(board: (string | number)[][]){
   return hasOne
 }
 
-function makeWords(arr: (string | number)[], phrases: Record<string, string>): string[] {
-    const results: string[] = [];
+function makeWords(arr: (string | number)[], phrases: Record<string, string>): {word: string, explanation: string}[] {
+    const results: {word: string, explanation: string}[] = [];
     let i  = 0;
     while (i <= arr.length -1) {
         let j = i + 1;
         for (j; j < arr.length; j++) {
             var word = String(arr[i]) + String(arr[j]);
-            if (Object.keys(phrases).includes(word) && !results.includes(word)) {
-                results.push(word);
+            if (Object.keys(phrases).includes(word) && !results.some(r => r.word === word)) {
+                results.push({word: word, explanation: phrases[word]});
             }
             var k = j + 1;
             for (k; k < arr.length; k++) {
                 var another_word = String(arr[i]) + String(arr[j]) + String(arr[k]);
-                if (Object.keys(phrases).includes(another_word) && !results.includes(another_word)) {
-                    results.push(another_word);
+                if (Object.keys(phrases).includes(another_word) && !results.some(r => r.word === another_word)) {
+                    results.push({word: another_word, explanation: phrases[another_word]});
                 }
             }
         }

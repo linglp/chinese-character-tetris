@@ -18,7 +18,7 @@ type MoveShapeProps = {
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
   hasInitialized: boolean;
   setHasInitialized: (value: boolean | ((prev: boolean) => boolean)) => void;
-  setFood: (value: (string)[]) => void;
+  setFood: (value: (Record<string, string>)[]) => void;
   words: any[];
   phrases: Record<string, string>;
 };
