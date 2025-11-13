@@ -11,11 +11,12 @@ type BoardProps = {
     setBoard: (value: (string | number)[][]) => void;
     setScore: (value: number) => void;
     setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
+    words: any[];
 };
 
 
 
-const Board: React.FC<BoardProps> = ({ board, isDisabled, endGame, setShape, setEndGame, setBoard, setScore, setIsDisabled}) => {
+const Board: React.FC<BoardProps> = ({ board, isDisabled, endGame, setShape, setEndGame, setBoard, setScore, setIsDisabled, words}) => {
   useEffect(() => {
     if (endGame) {
       setIsDisabled(false); // Enable the button when game ends
@@ -35,7 +36,7 @@ const Board: React.FC<BoardProps> = ({ board, isDisabled, endGame, setShape, set
           ))}
         </div>
       ))}
-      {endGame && <EndGame isDisabled={isDisabled} onUpdate={setShape} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled}/>}
+      {endGame && <EndGame isDisabled={isDisabled} onUpdate={setShape} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled} words={words}/>}
     </div>
   );
   };
