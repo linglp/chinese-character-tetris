@@ -18,7 +18,7 @@ type MoveShapeProps = {
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
   hasInitialized: boolean;
   setHasInitialized: (value: boolean | ((prev: boolean) => boolean)) => void;
-  setFood: (value: (Record<string, string>)[]) => void;
+  setFood: (value: {word: string, explanation: string}[] | ((prev: {word: string, explanation: string}[]) => {word: string, explanation: string}[])) => void;
   words: any[];
   phrases: Record<string, string>;
 };
@@ -96,7 +96,11 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           const [newScore, updatedBoard, foundPhrases] = clearBoardCountScore(newBoard, score, phrases);
           setScore(newScore);
           setBoard(updatedBoard);
-          setFood(foundPhrases);
+          
+          // Update food state with found words
+          if (foundPhrases.length > 0) {
+            setFood((prevFood: {word: string, explanation: string}[]) => [...prevFood, ...foundPhrases]);
+          }
 
           // restart a new shape
           var newShape = randomShapeGenerator(words);

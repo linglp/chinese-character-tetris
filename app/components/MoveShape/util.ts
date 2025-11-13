@@ -1,3 +1,4 @@
+import { use, useEffect } from "react";
 import type { shapePositionType, shapePositionWithValueType } from "../Board/util";
 
 type MoveCheckParams = {
@@ -228,21 +229,22 @@ export function saveBox(matrix: (string | number)[][]): shapePositionType[] {
 /**
  * Clears fully filled rows in a Tetris-like board and returns the updated score and board.
  *
- * A row is considered "filled" if all its cells contain `1`. 
- * Cleared rows are either removed or reset to zeros depending on implementation.
- * The score can be incremented based on the number of cleared rows.
+ * A row is considered "filled" if all its cells contain strings. 
+ * Cleared rows are removed and empty rows are added to the top.
+ * The score is incremented based on the number of cleared rows.
  *
- * @param {number[][]} board - The current game board, represented as a 2D array of numbers.
+ * @param {(string | number)[][]} board - The current game board, represented as a 2D array.
  * @param {number} score - The current score before clearing any rows.
  * @param {Record<string, string>} phrases - The list of valid phrases for scoring.
- * @returns {[number, number[][]]} - A tuple containing:
+ * @returns {[number, (string | number)[][], {word: string, explanation: string}[]]} - A tuple containing:
  *    1. The updated score.
  *    2. The updated board after clearing filled rows.
+ *    3. The found words with their explanations.
  */
-export function clearBoardCountScore(board: (string | number)[][], score: number, phrases: Record<string, string>): [number, (string | number)[][], Record<string, string>[]]{
+export function clearBoardCountScore(board: (string | number)[][], score: number, phrases: Record<string, string>): [number, (string | number)[][], {word: string, explanation: string}[]]{
+  const foundWords: {word: string, explanation: string}[] = [];
   const rowsToClear: number[] = [];
   const newBoard = board.map(row => [...row]);
-  const foundWords: Record<string, string>[] = [];
 
   for (let i = 0; i < board.length; i++) {
     const allFilled = <T>(arr: T[]): boolean => arr.every(val => typeof val === 'string');
