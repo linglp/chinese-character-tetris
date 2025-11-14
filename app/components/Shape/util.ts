@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export function createLShape1(): number[][]{
     return [[1, 0, 0],
             [1, 1, 1],
@@ -232,8 +234,56 @@ const shapeRegistry: { [key: string]: () => number[][] } = {
     createSquareShape1,
 }
 
-export function randomShapeGenerator(): number[][] {
+
+function generateRandomCharacter(charArr: string[]): string {
+    const lengthOfArray = charArr.length;
+    const randomElement = charArr[Math.floor(Math.random() * lengthOfArray)];
+    return randomElement;
+}
+
+function addCharacterToShape(charArr: string[], shape: number[][]): (string | number)[][] {
+    console.log('charArr in addCharacterToShape', charArr)
+    const shapeWithCharacter: (string | number)[][] = shape.map(row => [...row]);
+
+    for (let i = 0; i < shape.length; i++) {
+        for (let j = 0; j < shape[i].length; j++) {
+            if (shape[i][j] === 1) {
+                if (charArr == undefined){
+                    console.log('charArr is undefined');
+                    charArr = ["汉","字"];
+                }
+                var character = generateRandomCharacter(charArr);
+                shapeWithCharacter[i][j] = character;
+            }
+        }
+    }
+    return shapeWithCharacter;
+}
+
+
+export function loadWords(): [any[], Record<string, string>] {
+  const [words, setWords] = useState<any[]>([]);
+  const [phrases, setPhrases] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/words.json")
+      .then((res) => res.json())
+      .then((data) => setWords(data))
+      .catch((err) => console.error("Error loading words.json:", err));
+
+    fetch("/vocabulary.json")
+      .then((res) => res.json())
+      .then((data) => setPhrases(data))
+      .catch((err) => console.error("Error loading vocabulary.json:", err));
+  }, []); //run once
+
+  return [words, phrases];
+}
+
+export function randomShapeGenerator(words: any[]): (string | number)[][] {
     let randomShape:string = allShapesFunctions[Math.floor(Math.random() * allShapesFunctions.length)];
     const fn = shapeRegistry[randomShape];
-    return fn();
+    var shape = fn();
+    const updatedShape = addCharacterToShape(words, shape);
+    return updatedShape;
 }

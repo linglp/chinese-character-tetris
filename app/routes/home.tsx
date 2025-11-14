@@ -5,6 +5,8 @@ import Board from "../components/Board";
 import MoveShape from "../components/MoveShape"
 import './home.scss';
 import BackgroundMusic from "../components/BackgroundMusic"
+import { loadWords } from "../components/Shape/util";
+
 
 
 export function meta({}: Route.MetaArgs) {
@@ -25,24 +27,40 @@ export const createBoard = () => {
 const initBoard = createBoard();
 
 export default function Home() {
-  const [randomShape, setShape] = useState<number[][]>([]);
-  const [board, setBoard] = useState<number[][]>(initBoard);
+    // Load words ONCE at the top level
+  const [words, phrases] = loadWords();
+  
+  const [randomShape, setShape] = useState<(string | number)[][]>([]);
+  const [board, setBoard] = useState<(string | number)[][]>(initBoard);
   const [borderBox, setBorderBox] = useState<number[][]>([]);
   const [score, setScore] = useState(0);
   const [endGame, setEndGame] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [food, setFood] = useState<{word: string, explanation: string}[]>([]);
 
   return (
   <div className="app-container">
     <div className="content">
-      <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} endGame={endGame} hasInitialized={hasInitialized} isDisabled={isDisabled} setIsDisabled={setIsDisabled}/>
+      <Welcome onUpdate={setShape} score={score} setEndGame={setEndGame} setBoard={setBoard} setScore={setScore} endGame={endGame} hasInitialized={hasInitialized} isDisabled={isDisabled} setIsDisabled={setIsDisabled} words={words}/>
       <div className="main-container">
         <div className="shape-container">
-        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized}/>)}
+        {randomShape.length > 0 && (<MoveShape setShape={setShape} shape={randomShape} setBoard={setBoard} board={board} score={score} setScore={setScore} borderBox={borderBox} rowLimit={ROWS} colLimit={COLS} setEndGame={setEndGame} hasInitialized={hasInitialized} setHasInitialized={setHasInitialized} setFood={setFood} words={words} phrases={phrases}/>)}
         </div>
 
-        <Board board={board} endGame={endGame} setEndGame={setEndGame} setShape={setShape} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled} isDisabled={isDisabled}/>
+        <Board board={board} endGame={endGame} setEndGame={setEndGame} setShape={setShape} setBoard={setBoard} setScore={setScore} setIsDisabled={setIsDisabled} isDisabled={isDisabled} words={words} setFood={setFood}/>
+
+        <div className="food-container">
+          <div className="food-header">Food collected</div>
+          <div className="food-items-wrapper">
+            {food.map((item, index) => (
+              <div key={index} className="food-item">
+                <div className="food-word">{item.word}</div>
+                <div className="food-explanation">{item.explanation}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <BackgroundMusic endGame={endGame} hasInitialized={hasInitialized}/>
       </div>
