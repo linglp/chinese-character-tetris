@@ -9,10 +9,11 @@ type StartButtonProps = {
     setBoard: (value: (string | number)[][]) => void;
     setScore: (value: number) => void;
     setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
+    setFood: (value: {word: string, explanation: string}[] | ((prev: {word: string, explanation: string}[]) => {word: string, explanation: string}[])) => void;
     words: any[];
 };
 
-const StartGameButton: React.FC<StartButtonProps> = ({ onUpdate, setEndGame, setBoard, setScore, setIsDisabled, isDisabled, words }) => {
+const StartGameButton: React.FC<StartButtonProps> = ({ onUpdate, setEndGame, setBoard, setScore, setIsDisabled, isDisabled, words, setFood }) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         // Now use the words that were loaded
         var shape = randomShapeGenerator(words);
@@ -21,6 +22,7 @@ const StartGameButton: React.FC<StartButtonProps> = ({ onUpdate, setEndGame, set
         setBoard(createBoard());
         setScore(0);
         setIsDisabled(true);
+        setFood([]);
     };
 
     return (
