@@ -6,6 +6,7 @@ import MoveShape from "../components/MoveShape"
 import './home.scss';
 import BackgroundMusic from "../components/BackgroundMusic"
 import { loadWords } from "../components/Shape/util";
+import { getUniqueObjectCounts } from '../components/MoveShape/util';
 
 
 
@@ -39,6 +40,8 @@ export default function Home() {
   const [isDisabled, setIsDisabled] = useState(false);
   const [food, setFood] = useState<{word: string, explanation: string}[]>([]);
 
+  var foodCounts = food.length > 0 ? getUniqueObjectCounts(food) : [];
+
   return (
   <div className="app-container">
     <div className="content">
@@ -53,12 +56,16 @@ export default function Home() {
         <div className="food-container">
           <div className="food-header">Food collected</div>
           <div className="food-items-wrapper">
-            {food.map((item, index) => (
-              <div key={index} className="food-item">
-                <div className="food-word">{item.word}</div>
-                <div className="food-explanation">{item.explanation}</div>
+
+            {foodCounts.map(object => (
+              <div key={object.object.word} className="food-item">
+              <div className="food-word-line">
+                <div className="food-word">{object.object.word}</div>
+                <div className="food-count">x {object.count}</div>
               </div>
-            ))}
+                <div className="food-explanation">{object.object.explanation}</div>
+              </div>
+            ))} 
           </div>
         </div>
 

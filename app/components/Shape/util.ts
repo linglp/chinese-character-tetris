@@ -242,7 +242,6 @@ function generateRandomCharacter(charArr: string[]): string {
 }
 
 function addCharacterToShape(charArr: string[], shape: number[][]): (string | number)[][] {
-    console.log('charArr in addCharacterToShape', charArr)
     const shapeWithCharacter: (string | number)[][] = shape.map(row => [...row]);
 
     for (let i = 0; i < shape.length; i++) {

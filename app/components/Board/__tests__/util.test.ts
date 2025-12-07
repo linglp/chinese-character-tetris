@@ -7,14 +7,14 @@ const testBoardwithShapes = [
       name: 'square shape in the lower right corner',
       board: [
         [0, 0, 0],
-        [0, 1, 1],
-        [0, 1, 1],
+        [0, "粽", "粽"],
+        [0, "粽", "粽"],
       ],
       shape: [
-       {"row": 1, "col": 1},
-       {"row": 1, "col": 2},
-       {"row": 2, "col": 1},
-       {"row": 2, "col": 2},
+       {"row": 1, "col": 1, "value":"粽"},
+       {"row": 1, "col": 2, "value":"粽"},
+       {"row": 2, "col": 1, "value":"粽"},
+       {"row": 2, "col": 2, "value":"粽"},
       ],
       expected: [
         [0, 0, 0],
@@ -26,24 +26,24 @@ const testBoardwithShapes = [
       name: 's shape in the middle, other shape does not get affected',
       board: [
         [0, 0, 0, 0, 0],
-        [0, 0, 1, 1, 0],
-        [0, 0, 1, 0, 0],
-        [0, 1, 1, 0, 0],
-        [0, 0, 0, 1, 1],
+        [0, 0, "粽", "粽", 0],
+        [0, 0, "粽", 0, 0],
+        [0, "粽", "粽", 0, 0],
+        [0, 0, 0, "粽", "粽"],
       ],
       shape: [
-        {"row": 1, "col": 2},
-        {"row": 1, "col": 3},
-        {"row": 2, "col": 2},
-        {"row": 3, "col": 1},
-        {"row": 3, "col": 2},
+        {"row": 1, "col": 2, "value":"粽"},
+        {"row": 1, "col": 3, "value":"粽"},
+        {"row": 2, "col": 2, "value":"粽"},
+        {"row": 3, "col": 1, "value":"粽"},
+        {"row": 3, "col": 2, "value":"粽"},
       ],
       expected: [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1],
+        [0, 0, 0, "粽", "粽"],
       ]
     },
   ];
@@ -66,23 +66,23 @@ const  testUpdateBoardCases = [
           [0, 0, 0],
         ],
         shape: [
-            {"row": 1, "col": 0},
-            {"row": 1, "col": 1},
-            {"row": 2, "col": 0},
-            {"row": 2, "col": 1},
+            {"row": 1, "col": 0, "value":"粽"},
+            {"row": 1, "col": 1, "value":"粽"},
+            {"row": 2, "col": 0, "value":"粽"},
+            {"row": 2, "col": 1, "value":"粽"},
         ],
         expected:
     {
         newBoard: [
             [0, 0, 0],
-            [1, 1, 0],
-            [1, 1, 0]
+            ["粽", "粽", 0],
+            ["粽", "粽", 0]
         ],
         shapePos:[
-          {"row": 1, "col": 0},
-          {"row": 1, "col": 1},
-          {"row": 2, "col": 0},
-          {"row": 2, "col": 1}]
+          {"row": 1, "col": 0, "value":"粽"},
+          {"row": 1, "col": 1, "value":"粽"},
+          {"row": 2, "col": 0, "value":"粽"},
+          {"row": 2, "col": 1, "value":"粽"}]
     }
 },
     {
@@ -93,23 +93,23 @@ const  testUpdateBoardCases = [
           [0, 0, 0],
         ],
         shape: [
-          {"row": 0, "col": 0},
-          {"row": 0, "col": 1},
-          {"row": 1, "col": 0},
-          {"row": 1, "col": 1}
+          {"row": 0, "col": 0, "value": "粽"},
+          {"row": 0, "col": 1, "value": "粽"},
+          {"row": 1, "col": 0, "value": "粽"},
+          {"row": 1, "col": 1, "value": "粽"}
         ],
         activity: "",
         expected:     {
             newBoard: [
-                [1, 1, 0],
-                [1, 1, 0],
+                ["粽", "粽", 0],
+                ["粽", "粽", 0],
                 [0, 0, 0]
             ],
             shapePos:[
-                {"row": 0, "col": 0},
-                {"row": 0, "col": 1},
-                {"row": 1, "col": 0},
-                {"row": 1, "col": 1}]
+                {"row": 0, "col": 0, "value": "粽"},
+                {"row": 0, "col": 1, "value": "粽"},
+                {"row": 1, "col": 0, "value": "粽"},
+                {"row": 1, "col": 1, "value": "粽"}]
         }
     },
     {
@@ -120,24 +120,24 @@ const  testUpdateBoardCases = [
           [0, 0, 0],
         ],
         shape: [
-            {"row": 0, "col": 1},
-            {"row": 0, "col": 2},
-            {"row": 1, "col": 1},
-            {"row": 1, "col": 2},
+            {"row": 0, "col": 1, "value": "粽"},
+            {"row": 0, "col": 2, "value": "粽"},
+            {"row": 1, "col": 1, "value": "粽"},
+            {"row": 1, "col": 2, "value": "粽"},
         ],
         activity: "ArrowRight",
         expected:
         {
             newBoard: [
-                [0, 1, 1],
-                [0, 1, 1],
+                [0, "粽", "粽"],
+                [0, "粽", "粽"],
                 [0, 0, 0]
             ],
             shapePos:[
-            {"row": 0, "col": 1},
-            {"row": 0, "col": 2},
-            {"row": 1, "col": 1},
-            {"row": 1, "col": 2},
+            {"row": 0, "col": 1, "value": "粽"},
+            {"row": 0, "col": 2, "value": "粽"},
+            {"row": 1, "col": 1, "value": "粽"},
+            {"row": 1, "col": 2, "value": "粽"},
         ]
         }
     },
@@ -147,29 +147,29 @@ const  testUpdateBoardCases = [
           [0, 0, 0, 0],
           [0, 0, 0, 0],
           [0, 0, 0, 0],
-          [0, 0, 1, 1],
+          [0, 0, "粽", "粽"],
         ],
         shape: [
-            {"row": 0, "col": 2},
-            {"row": 0, "col": 3},
-            {"row": 1, "col": 2},
-            {"row": 2, "col": 1},
-            {"row": 2, "col": 2},
+            {"row": 0, "col": 2, "value": "粽"},
+            {"row": 0, "col": 3, "value": "粽"},
+            {"row": 1, "col": 2, "value": "粽"},
+            {"row": 2, "col": 1, "value": "粽"},
+            {"row": 2, "col": 2, "value": "粽"},
         ],
         activity: "ArrowLeft",
         expected: {
         newBoard: [
-            [0, 0, 1, 1],
-            [0, 0, 1, 0],
-            [0, 1, 1, 0],
-            [0, 0, 1, 1],
+            [0, 0, "粽", "粽"],
+            [0, 0, "粽", 0],
+            [0, "粽", "粽", 0],
+            [0, 0, "粽", "粽"],
           ],
           shapePos:[
-            {"row": 0, "col": 2},
-            {"row": 0, "col": 3},
-            {"row": 1, "col": 2},
-            {"row": 2, "col": 1},
-            {"row": 2, "col": 2},
+            {"row": 0, "col": 2, "value": "粽"},
+            {"row": 0, "col": 3, "value": "粽"},
+            {"row": 1, "col": 2, "value": "粽"},
+            {"row": 2, "col": 1, "value": "粽"},
+            {"row": 2, "col": 2, "value": "粽"},
         ]
         }
     },

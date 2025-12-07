@@ -57,12 +57,9 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       //For auto movement, if in border, clean up the board
       //Then check if occupied. If not occupied, apply the move
       //If can't move down either because of out of border or occupied, lock the piece
-      console.log('Auto move down: inBorder=', inBorder);
-      
       if (inBorder) {
         const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
         const Occupied = ifOccupy({nextShape, board: cleanedBoard});
-        console.log('Auto move down: Occupied=', Occupied);
         
         if (!Occupied) {
           // Valid move: move the piece down

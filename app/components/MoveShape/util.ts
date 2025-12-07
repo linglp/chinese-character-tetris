@@ -196,7 +196,7 @@ export function ifInBorder({nextShape, rowLimit, colLimit}: MoveCheckParams): bo
  */
 export function mapShapeToPositions(matrix: (string | number)[][]): shapePositionWithValueType[] {
   const positions: shapePositionWithValueType[] = [];
-
+  console.log("matrix in mapShapeToPositions:", matrix);
   matrix.forEach((row, rowIndex) => {
     row.forEach((cell, colIndex) => {
       if (typeof cell === 'string') {
@@ -204,7 +204,7 @@ export function mapShapeToPositions(matrix: (string | number)[][]): shapePositio
       }
     });
   });
-
+  console.log("positions in mapShapeToPositions:", positions);
   return positions;
 }
 
@@ -242,6 +242,7 @@ export function saveBox(matrix: (string | number)[][]): shapePositionType[] {
  *    3. The found words with their explanations.
  */
 export function clearBoardCountScore(board: (string | number)[][], score: number, phrases: Record<string, string>): [number, (string | number)[][], {word: string, explanation: string}[]]{
+  console.log('clearBoardCountScore called with board:', board, 'score:', score); // Debug log
   const foundWords: {word: string, explanation: string}[] = [];
   const rowsToClear: number[] = [];
   const newBoard = board.map(row => [...row]);
@@ -309,4 +310,21 @@ export function playButtonMovingSound(activity: string){
     const audio = new Audio('/left-right-button.wav');
     audio.play();
   }
+}
+
+export function getUniqueObjectCounts(arr: object[]): {object: any, count: number}[] {
+  const counts = new Map();
+
+  for (const obj of arr) {
+    const objString = JSON.stringify(obj); // Convert object to string for use as Map key
+    counts.set(objString, (counts.get(objString) || 0) + 1);
+  }
+
+  // If you need the results as an array of objects with their counts
+  const result = [];
+  for (const [objString, count] of counts.entries()) {
+    result.push({ object: JSON.parse(objString), count: count });
+  }
+
+  return result;
 }

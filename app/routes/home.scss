@@ -121,6 +121,18 @@
   text-align: left;
 }
 
+.food-count {
+  color: #FF1493;
+  font-weight: bold; /* Match the word's bold weight */
+  font-size: 1.2rem; /* Match the word's size */
+}
+
+
+.food-word-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 .food-explanation {
   font-size: 0.85rem;
   color: #8B008B;

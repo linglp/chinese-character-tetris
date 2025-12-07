@@ -56,7 +56,6 @@ export function updateBoard({board, newShape}: updateBoardProps):  { newBoard: (
     const colIndex = pos.col;
     newBoard[rowIndex][colIndex] = pos.value;
 })
-    console.log('Updated Board:', newBoard);
     return { newBoard, shapePos };
 }
 
