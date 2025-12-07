@@ -282,7 +282,7 @@ export function ifGameEnd(board: (string | number)[][]){
   return hasOne
 }
 
-function makeWords(arr: (string | number)[], phrases: Record<string, string>): {word: string, explanation: string}[] {
+export function makeWords(arr: (string | number)[], phrases: Record<string, string>): {word: string, explanation: string}[] {
     const results: {word: string, explanation: string}[] = [];
     let i  = 0;
     while (i <= arr.length -1) {

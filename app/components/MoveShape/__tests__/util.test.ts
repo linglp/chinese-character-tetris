@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy, mapShapeToPositions, rotateShape, debugShapePosition, clearBoardCountScore, ifInBorder, makeWords} from '../util';
+import { computeBorder, findOccupant, ifOccupy, mapShapeToPositions, rotateShape, debugShapePosition, clearBoardCountScore, ifInBorder, makeWords, getUniqueObjectCounts} from '../util';
 
 const testShapes = [
     {
@@ -480,5 +480,48 @@ describe('test if words can be extracted correctly', ()=>{
       });
 })
 
+
+const testUniqueWords = [
+    [
+        {
+            name: "count unique objects in an array with two unique objects",
+            array: 
+            [
+                {"粽子": "description 1"}, 
+                {"粽子": "description 1"}, 
+                {"汤圆": "description 2"}, 
+                {"粽子": "description 1"},
+            ],
+            expected: [
+                {object: {"粽子": "description 1"}, "count": 3},
+                {object: {"汤圆": "description 2"}, "count": 1},
+            ]
+        },
+    {
+        name: "count unique objects in an array with three unique objects",
+        array: 
+        [
+            {"粽子": "description 1"}, 
+            {"粽子": "description 1"}, 
+            {"汤圆": "description 2"}, 
+            {"汤圆": "description 2"}, 
+            {"粽子": "description 1"},
+            {"年糕": "description 3"},
+        ],
+        expected: [
+            {object: {"粽子": "description 1"}, "count": 3},
+            {object: {"汤圆": "description 2"}, "count": 2},
+            {object: {"年糕": "description 3"}, "count": 1},
+        ]
+    }
+        
+    ]
+]
+describe('test if unique objects can be counted correctly', ()=>{
+    test.each(testUniqueWords)('$name', ({array, expected}) => {
+        const result = getUniqueObjectCounts(array)
+        expect(result).toEqual(expected);
+      });
+})
 
 
