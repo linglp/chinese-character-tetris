@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy, mapShapeToPositions, rotateShape, debugShapePosition, clearBoardCountScore, ifInBorder} from '../util';
+import { computeBorder, findOccupant, ifOccupy, mapShapeToPositions, rotateShape, debugShapePosition, clearBoardCountScore, ifInBorder, makeWords} from '../util';
 
 const testShapes = [
     {
@@ -418,7 +418,65 @@ const testClearBoardCountScore = [
 describe('test if shape can be cleared correctly', ()=>{
     test.each(testClearBoardCountScore)('$name', ({board, score, phrases, expected}) => {
         const result = clearBoardCountScore(board, score, phrases)
-        console.log('Result from clearBoardCountScore:', result);
         expect(result).toEqual(expected);
       });
 })
+
+
+const testWords: {
+    name: string;
+    array: (string | number)[];
+    phrases: Record<string, string>;
+    expected: {word: string, explanation: string}[];
+}[] = [
+    {
+        name: "zong zi appears one time",
+        array: ["粽", "子", "汤", "汤", "汤"],
+        phrases: {
+            "粽子": "A traditional Chinese rice dumpling wrapped in bamboo leaves.",
+        },
+        expected: [
+            {word: "粽子", explanation: "A traditional Chinese rice dumpling wrapped in bamboo leaves."}
+        ]
+    },
+    {
+    name: "zong zi appears three times",
+    array: ["粽", "子", "粽", "子", "粽", "子"],
+    phrases: {
+        "粽子": "A traditional Chinese rice dumpling wrapped in bamboo leaves.",
+    },
+    expected: [
+        {word: "粽子", explanation: "A traditional Chinese rice dumpling wrapped in bamboo leaves."}
+    ]
+    },
+    {
+    name: "zong zi mixed with other random characters",
+    array: ["粽", "子", "粽", "子", "粽", "糕", "糕", "糕", "元"],
+    phrases: {
+        "粽子": "A traditional Chinese rice dumpling wrapped in bamboo leaves.",
+    },
+    expected: [
+        {word: "粽子", explanation: "A traditional Chinese rice dumpling wrapped in bamboo leaves."}
+    ]
+    },
+    {
+    name: "multiple food items can be extracted",
+    array: ["年", "年", "粽", "子", "粽", "糕", "糕", "糕", "元"],
+    phrases: {
+        "粽子": "A traditional Chinese rice dumpling wrapped in bamboo leaves.",
+        "年糕": "Chinese New Year cake made from glutinous rice.",
+    },
+    expected: [
+        {word: "年糕", explanation: "Chinese New Year cake made from glutinous rice."},
+        {word: "粽子", explanation: "A traditional Chinese rice dumpling wrapped in bamboo leaves."}, 
+    ]
+    },
+
+]
+describe('test if words can be extracted correctly', ()=>{
+    test.each(testWords)('$name', ({array, phrases, expected}) => {
+        const result = makeWords(array, phrases)
+        expect(result).toEqual(expected);
+      });
+})
+
