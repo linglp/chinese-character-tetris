@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { computeBorder, findOccupant, ifOccupy, mapShapeToPositions, rotateShape, debugShapePosition, clearBoardCountScore, ifInBorder, makeWords, getUniqueObjectCounts} from '../util';
+import { computeBorder, findOccupant, ifOccupy, mapShapeToPositions, rotateShape, clearBoardCountScore, ifInBorder, makeWords, getUniqueObjectCounts} from '../util';
 
 const testShapes = [
     {
@@ -525,3 +525,76 @@ describe('test if unique objects can be counted correctly', ()=>{
 })
 
 
+const testRotateShapes = [
+    {
+        name: "rotate S shape",
+        shapeCoordinate: 
+        //     col 0    col 1   col 2
+        // row 0:  0      0       0
+        // row 1:  0      粽      粽
+        // row 2:  粽     粽       0
+        [
+            {"row": 1, "col": 1, "value": "粽"},
+            {"row": 1, "col": 2, "value": "粽"},
+            {"row": 2, "col": 0, "value": "粽"},
+            {"row": 2, "col": 1, "value": "粽"},
+        ],
+
+        box: [
+            {"row": 1, "col": 1, "value": "粽"},
+            {"row": 2, "col": 1, "value": "粽"},
+            {"row": 0, "col": 0, "value": "粽"},
+            {"row": 1, "col": 0, "value": "粽"}
+        ],
+        //       col 0    col 1   col 2
+        // row 0:  粽      0       0
+        // row 1:  粽      粽      0
+        // row 2:  0      粽      0
+        expected: [ 
+            { "row": 2, "col": 1, "value": "粽" },
+            { "row": 3, "col": 1, "value": "粽" },
+            { "row": 1, "col": 0, "value": "粽" },
+            { "row": 2, "col": 0, "value": "粽" }
+        ]
+
+    },
+{
+    name: "rotate L shape",
+    shapeCoordinate: 
+    //      col 0   col 1   col 2
+    // row 0:  0      粽      0
+    // row 1:  0      粽      0
+    // row 2:  0      粽      粽 
+    [
+        {"row": 0, "col": 1, "value": "粽"},
+        {"row": 1, "col": 1, "value": "粽"},
+        {"row": 2, "col": 1, "value": "粽"},
+        {"row": 2, "col": 2, "value": "粽"},
+    ],
+
+    box: [
+        {"row": 1, "col": 1, "value": "粽"},
+        {"row": 2, "col": 1, "value": "粽"},
+        {"row": 0, "col": 0, "value": "粽"},
+        {"row": 1, "col": 0, "value": "粽"}
+    ],
+
+    //     col 0   col 1   col 2
+    // row 0:  0      0      0
+    // row 1:  粽     粽     粽
+    // row 2:  粽     0      0
+
+    expected:[
+        {"row": 2, "col": 2, "value":  "粽" },
+        { "row": 2, "col": 1, "value": "粽" },
+        { "row": 2, "col": 0, "value": "粽" },
+        { "row": 3, "col": 0, "value": "粽" }]
+
+}
+]
+describe('test if shapes can be rotated correctly', ()=>{
+    test.each(testRotateShapes)('$name', ({shapeCoordinate, box, expected}) => {
+        const result = rotateShape(shapeCoordinate, box)
+        expect(result).toEqual(expected);
+      });
+})

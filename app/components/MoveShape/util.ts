@@ -161,14 +161,15 @@ function getPivot(shapeCoordinate: shapePositionType[]): shapePositionType{
 */
 export function rotateShape(shapeCoordinate: shapePositionWithValueType[], box: shapePositionType[]): shapePositionWithValueType[]{
   const pivot = getPivot(box);
-
   //row is vertical position while col is horizontal position 
-  const cx = pivot["col"];
-  const cy = pivot["row"];
+  
+  const cx = Math.round(pivot["col"])
+  const cy = Math.round(pivot["row"]);
 
   var rotated = shapeCoordinate.map(cell => ({
-  row: Math.round(cy + (cell.col - cx)),   // y' = cy - (x - cx)
-  col: Math.round(cx - (cell.row - cy)),   // x' = cx + (y - cy)
+  // for converting -0 to 0, add +0
+  row: Math.round(cy + (cell.col - cx)) + 0,   
+  col: Math.round(cx - (cell.row - cy)) + 0,   
   value: cell.value
 }));
 
@@ -320,7 +321,6 @@ export function getUniqueObjectCounts(arr: object[]): {object: any, count: numbe
     counts.set(objString, (counts.get(objString) || 0) + 1);
   }
 
-  // If you need the results as an array of objects with their counts
   const result = [];
   for (const [objString, count] of counts.entries()) {
     result.push({ object: JSON.parse(objString), count: count });
