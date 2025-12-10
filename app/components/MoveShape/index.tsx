@@ -112,6 +112,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
       e.preventDefault();
 
       const [nextShape, newBox] = findNextShape({activity: e.key, shapeCoordinate: shapeCoordinate, box: box});
+      playButtonMovingSound(e.key);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
 
       //For manual movement, if in border, clean up the board
