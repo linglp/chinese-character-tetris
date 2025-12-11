@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+
 
 export function createLShape1(): number[][]{
     return [[1, 0, 0],
@@ -257,26 +257,6 @@ function addCharacterToShape(charArr: string[], shape: number[][]): (string | nu
         }
     }
     return shapeWithCharacter;
-}
-
-
-export function loadWords(): [string[], Record<string, string>] {
-  const [words, setWords] = useState<string[]>([]);
-  const [phrases, setPhrases] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    fetch("/words.json")
-      .then((res) => res.json())
-      .then((data) => setWords(data))
-      .catch((err) => console.error("Error loading words.json:", err));
-
-    fetch("/vocabulary.json")
-      .then((res) => res.json())
-      .then((data) => setPhrases(data))
-      .catch((err) => console.error("Error loading vocabulary.json:", err));
-  }, []); //run once
-
-  return [words, phrases];
 }
 
 export function randomShapeGenerator(words: string[]): (string | number)[][] {

@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Route } from "./+types/home";
 import Welcome from "../welcome/welcome";
 import Board from "../components/Board";
 import MoveShape from "../components/MoveShape"
 import './home.scss';
 import BackgroundMusic from "../components/BackgroundMusic"
-import { loadWords } from "../components/Shape/util";
 import { getUniqueObjectCounts } from '../components/MoveShape/util';
 
 
@@ -28,8 +27,22 @@ export const createBoard = () => {
 const initBoard = createBoard();
 
 export default function Home() {
-    // Load words ONCE at the top level
-  const [words, phrases] = loadWords();
+  // Load words ONCE at the top level
+  const [words, setWords] = useState<string[]>([]);
+  const [phrases, setPhrases] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/words.json")
+      .then((res) => res.json())
+      .then((data) => setWords(data))
+      .catch((err) => console.error("Error loading words.json:", err));
+
+    fetch("/vocabulary.json")
+      .then((res) => res.json())
+      .then((data) => setPhrases(data))
+      .catch((err) => console.error("Error loading vocabulary.json:", err));
+  }, []); //run onces
+
   
   const [randomShape, setShape] = useState<(string | number)[][]>([]);
   const [board, setBoard] = useState<(string | number)[][]>(initBoard);
