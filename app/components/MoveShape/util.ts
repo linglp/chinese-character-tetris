@@ -283,6 +283,22 @@ export function ifGameEnd(board: (string | number)[][]){
   return hasOne
 }
 
+
+/**
+ * Extracts valid Chinese words/phrases from an array of characters.
+ * 
+ * Scans through the array to find consecutive character combinations (2 or 3 characters)
+ * that match entries in the provided phrases dictionary. Each unique word is only 
+ * returned once, even if it appears multiple times in the array.
+ *
+ * @param {(string | number)[]} arr - Array of characters to search through for valid words
+ * @param {Record<string, string>} phrases - Dictionary of valid words mapped to their explanations
+ * @returns {{word: string, explanation: string}[]} Array of found words with their explanations
+ * 
+ ** @example
+ * makeWords(["粽", "子", "汤"], {"粽子": "Rice dumpling"})
+ * // Returns: [{word: "粽子", explanation: "Rice dumpling"}]
+ */
 export function makeWords(arr: (string | number)[], phrases: Record<string, string>): {word: string, explanation: string}[] {
     const results: {word: string, explanation: string}[] = [];
     let i  = 0;
