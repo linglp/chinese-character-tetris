@@ -2,25 +2,28 @@ import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { updateBoard, cleanUpBoard } from '../Board/util'
 import { ifInBorder, mapShapeToPositions, ifOccupy, findNextShape, saveBox, clearBoardCountScore, ifGameEnd, playButtonMovingSound} from './util';
-import { randomShapeGenerator } from '../Shape/util';
+import { randomShapeGenerator} from '../Shape/util';
 
 
 type MoveShapeProps = {
-  setShape: (value: number[][]) => void;
-  shape: number[][];
-  board: number[][];
+  setShape: (value: (string | number)[][]) => void;
+  shape: (string | number)[][];
+  board: (string | number)[][];
   rowLimit: number;
   colLimit: number;
-  setBoard: (value: number[][]) => void;
+  setBoard: (value: (string | number)[][]) => void;
   score: number;
   setScore: (value: number) => void;
   borderBox: number[][];
   setEndGame: (value: boolean | ((prev: boolean) => boolean)) => void;
   hasInitialized: boolean;
   setHasInitialized: (value: boolean | ((prev: boolean) => boolean)) => void;
+  setFood: (value: {word: string, explanation: string}[] | ((prev: {word: string, explanation: string}[]) => {word: string, explanation: string}[])) => void;
+  words: string[];
+  phrases: Record<string, string>;
 };
 
-const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame, hasInitialized, setHasInitialized}) => {
+const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, score, setScore, rowLimit, colLimit, setEndGame, hasInitialized, setHasInitialized, setFood, words, phrases}) => {
   //coordinate of shape that is currently being moved
   const [shapeCoordinate, setShapeCoordinate] = useState(mapShapeToPositions(shape));
   const [box, setBorderCoordinate] = useState(saveBox(shape));
@@ -30,7 +33,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
   useEffect(() => {
     if (!hasInitialized && shape.length > 0) {
       console.log("restarting...")
-      const [nextShape, newBox] = findNextShape("", shapeCoordinate, box);
+      const [nextShape, newBox] = findNextShape({activity: "", shapeCoordinate: shapeCoordinate, box: box});
       const {newBoard, shapePos} = updateBoard({board: board, newShape: nextShape});
       setShapeCoordinate(shapePos);
       setBoard(newBoard);
@@ -43,17 +46,17 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
   useEffect(() => {
   }, [shapeCoordinate])
 
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
     intervalId = setInterval(() => {
-      const [nextShape, newBox] = findNextShape("ArrowDown", shapeCoordinate, box);
+      const [nextShape, newBox] = findNextShape({activity: "ArrowDown", shapeCoordinate: shapeCoordinate, box: box});
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
 
       //For auto movement, if in border, clean up the board
       //Then check if occupied. If not occupied, apply the move
       //If can't move down either because of out of border or occupied, lock the piece
-      
       if (inBorder) {
         const cleanedBoard = cleanUpBoard({board, shapeCoordinate});
         const Occupied = ifOccupy({nextShape, board: cleanedBoard});
@@ -70,40 +73,46 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           return; // Exit early but do not lock the piece to the board
         }
       }
-      
-      // Can't move down (either out of border OR occupied)
-      // Lock the shape in place
-      const { newBoard, shapePos} = updateBoard({
-        board: board,
-        newShape: shapeCoordinate,
-      });
-      setBoard(newBoard);
-      
-      // check if the first row gets filled. If so, set endGame
-      const endGame = ifGameEnd(newBoard);
-      if (endGame){
-        setEndGame(endGame);
-        return
-      }
-      
-      // also calculate if a shape needs to be cleared
-      const [newScore, updatedBoard] = clearBoardCountScore(newBoard, score);
-      setScore(newScore);
-      setBoard(updatedBoard);
 
-      // restart a new shape
-      var newShape = randomShapeGenerator()
-      setShape(newShape);
-      setBorderCoordinate(saveBox(newShape));
-      setShapeCoordinate(mapShapeToPositions(newShape))
-      setHasInitialized(false);
-    }, 1000);
+          // Can't move down (either out of border OR occupied)
+          // Lock the shape in place
+          const { newBoard, shapePos} = updateBoard({
+            board: board,
+            newShape: shapeCoordinate,
+          });
+          setBoard(newBoard);
+          
+          // check if the first row gets filled. If so, set endGame
+          const endGame = ifGameEnd(newBoard);
+          if (endGame){
+            setEndGame(endGame);
+            return
+          }
+          
+          // also calculate if a shape needs to be cleared
+          const [newScore, updatedBoard, foundPhrases] = clearBoardCountScore(newBoard, score, phrases);
+          setScore(newScore);
+          setBoard(updatedBoard);
+          
+          // Update food state with found words
+          if (foundPhrases.length > 0) {
+            setFood((prevFood: {word: string, explanation: string}[]) => [...prevFood, ...foundPhrases]);
+          }
+
+          // restart a new shape
+          const newShape = randomShapeGenerator(words);
+          setShape(newShape);
+          setBorderCoordinate(saveBox(newShape));
+          setShapeCoordinate(mapShapeToPositions(newShape))
+          setHasInitialized(false);
+      }, 1000);
 
 
     const handleKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
+
+      const [nextShape, newBox] = findNextShape({activity: e.key, shapeCoordinate: shapeCoordinate, box: box});
       playButtonMovingSound(e.key);
-      const [nextShape, newBox] = findNextShape(e.key, shapeCoordinate, box);
       const inBorder = ifInBorder({nextShape: nextShape, rowLimit: rowLimit, colLimit: colLimit});
 
       //For manual movement, if in border, clean up the board

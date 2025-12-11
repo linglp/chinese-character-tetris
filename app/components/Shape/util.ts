@@ -1,3 +1,5 @@
+
+
 export function createLShape1(): number[][]{
     return [[1, 0, 0],
             [1, 1, 1],
@@ -232,8 +234,35 @@ const shapeRegistry: { [key: string]: () => number[][] } = {
     createSquareShape1,
 }
 
-export function randomShapeGenerator(): number[][] {
-    let randomShape:string = allShapesFunctions[Math.floor(Math.random() * allShapesFunctions.length)];
+
+function generateRandomCharacter(charArr: string[]): string {
+    const lengthOfArray = charArr.length;
+    const randomElement = charArr[Math.floor(Math.random() * lengthOfArray)];
+    return randomElement;
+}
+
+function addCharacterToShape(charArr: string[], shape: number[][]): (string | number)[][] {
+    const shapeWithCharacter: (string | number)[][] = shape.map(row => [...row]);
+
+    for (let i = 0; i < shape.length; i++) {
+        for (let j = 0; j < shape[i].length; j++) {
+            if (shape[i][j] === 1) {
+                if (charArr == undefined){
+                    console.log('charArr is undefined');
+                    charArr = ["汉","字"];
+                }
+                const character = generateRandomCharacter(charArr);
+                shapeWithCharacter[i][j] = character;
+            }
+        }
+    }
+    return shapeWithCharacter;
+}
+
+export function randomShapeGenerator(words: string[]): (string | number)[][] {
+    const randomShape:string = allShapesFunctions[Math.floor(Math.random() * allShapesFunctions.length)];
     const fn = shapeRegistry[randomShape];
-    return fn();
+    var shape = fn();
+    const updatedShape = addCharacterToShape(words, shape);
+    return updatedShape;
 }
