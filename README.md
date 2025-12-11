@@ -1,87 +1,51 @@
-# Welcome to React Router!
+# 🎮 Chinese Character Tetris (汉字俄罗斯方块)
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A fun and educational twist on the classic Tetris game that teaches Chinese vocabulary through gameplay! Instead of colored blocks, pieces are made of Chinese characters. When you complete a row containing valid Chinese words or phrases, you earn points and collect "food items" - traditional Chinese desserts and snacks!
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## 🎯 Game Rules
 
-## Features
+### Basic Gameplay
+- **Falling Pieces**: Tetris shapes fall from the top of the board, each made up of Chinese characters
+- **Movement Controls**:
+  - **←/→ Arrow Keys**: Move piece left or right
+  - **↓ Arrow Key**: Speed up the piece falling
+  - **↑ Arrow Key**: Rotate the piece 90° clockwise
+- **Auto-Drop**: Pieces automatically fall down one row every second
+- **Line Completion**: When a horizontal row is completely filled, it gets cleared and you earn **10 points per row**
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+### Word Collection System 🥟
+What makes this game special is the word collection feature:
+- When you clear a filled row, the game scans for **valid Chinese words**
+- Valid words are matched against a vocabulary list of 100+ traditional Chinese foods
+- Discovered words appear in the "Food collected" panel with their English explanations
+- Examples: 粽子 (zòngzi - rice dumplings), 月饼 (yuèbǐng - mooncakes), 汤圆 (tāngyuán - glutinous rice balls)
 
-## Getting Started
+### Game Over
+The game ends when:
+- Pieces stack up to the top row of the board
+- The board has 15 rows × 10 columns, so plan your moves carefully!
 
-### Installation
+## ✨ Features
 
-Install the dependencies:
+### 🎵 Audio & Visual
+- **Background Music**: Classic Tetris theme plays during gameplay
+- **Sound Effects**: Button press sounds when moving pieces left/right
+- **Cute Design**: Pastel purple/pink color scheme with playful Comic Sans font
+- **Smooth Animations**: Pieces move fluidly with visual transitions
 
-```bash
-npm install
-```
+### 📊 Statistics Tracking
+- **Real-time Score**: Updated score display showing points earned
+- **Timer**: Tracks how long you've been playing the current game
+- **Food Collection**: Visual list showing:
+  - Chinese word (e.g., 粽子)
+  - Count of how many times collected (e.g., × 3)
+  - English explanation with cultural context
 
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+### 🎓 Educational Value
+- Learn **100+ traditional Chinese food vocabulary** items
+- Includes desserts eaten during festivals like:
+  - Mid-Autumn Festival (月饼, 桂花糕)
+  - Dragon Boat Festival (粽子)
+  - Chinese New Year (年糕, 春卷)
+  - Lantern Festival (汤圆, 元宵)
+- Each word comes with detailed cultural explanations
