@@ -162,11 +162,11 @@ function getPivot(shapeCoordinate: shapePositionType[]): shapePositionType{
 export function rotateShape(shapeCoordinate: shapePositionWithValueType[], box: shapePositionType[]): shapePositionWithValueType[]{
   const pivot = getPivot(box);
   //row is vertical position while col is horizontal position 
-  
+
   const cx = Math.round(pivot["col"])
   const cy = Math.round(pivot["row"]);
 
-  var rotated = shapeCoordinate.map(cell => ({
+  const rotated = shapeCoordinate.map(cell => ({
   // for converting -0 to 0, add +0
   row: Math.round(cy + (cell.col - cx)) + 0,   
   col: Math.round(cx - (cell.row - cy)) + 0,   
@@ -290,13 +290,13 @@ export function makeWords(arr: (string | number)[], phrases: Record<string, stri
         let j = i + 1;
         for (j; j < arr.length; j++) {
             var word = String(arr[i]) + String(arr[j]);
-            if (Object.keys(phrases).includes(word) && !results.some(r => r.word === word)) {
+            if ((word in phrases)  && !results.some(r => r.word === word)) {
                 results.push({word: word, explanation: phrases[word]});
             }
             var k = j + 1;
             for (k; k < arr.length; k++) {
-                var another_word = String(arr[i]) + String(arr[j]) + String(arr[k]);
-                if (Object.keys(phrases).includes(another_word) && !results.some(r => r.word === another_word)) {
+                const another_word = String(arr[i]) + String(arr[j]) + String(arr[k]);
+                if ((another_word in phrases) && !results.some(r => r.word === another_word)) {
                     results.push({word: another_word, explanation: phrases[another_word]});
                 }
             }

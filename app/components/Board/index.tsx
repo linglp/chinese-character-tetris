@@ -11,7 +11,7 @@ type BoardProps = {
     setBoard: (value: (string | number)[][]) => void;
     setScore: (value: number) => void;
     setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
-    words: any[];
+    words: string[];
     setFood: (value: {word: string, explanation: string}[] | ((prev: {word: string, explanation: string}[]) => {word: string, explanation: string}[])) => void;
 };
 

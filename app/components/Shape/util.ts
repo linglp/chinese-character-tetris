@@ -251,7 +251,7 @@ function addCharacterToShape(charArr: string[], shape: number[][]): (string | nu
                     console.log('charArr is undefined');
                     charArr = ["汉","字"];
                 }
-                var character = generateRandomCharacter(charArr);
+                const character = generateRandomCharacter(charArr);
                 shapeWithCharacter[i][j] = character;
             }
         }
@@ -260,8 +260,8 @@ function addCharacterToShape(charArr: string[], shape: number[][]): (string | nu
 }
 
 
-export function loadWords(): [any[], Record<string, string>] {
-  const [words, setWords] = useState<any[]>([]);
+export function loadWords(): [string[], Record<string, string>] {
+  const [words, setWords] = useState<string[]>([]);
   const [phrases, setPhrases] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -279,8 +279,8 @@ export function loadWords(): [any[], Record<string, string>] {
   return [words, phrases];
 }
 
-export function randomShapeGenerator(words: any[]): (string | number)[][] {
-    let randomShape:string = allShapesFunctions[Math.floor(Math.random() * allShapesFunctions.length)];
+export function randomShapeGenerator(words: string[]): (string | number)[][] {
+    const randomShape:string = allShapesFunctions[Math.floor(Math.random() * allShapesFunctions.length)];
     const fn = shapeRegistry[randomShape];
     var shape = fn();
     const updatedShape = addCharacterToShape(words, shape);

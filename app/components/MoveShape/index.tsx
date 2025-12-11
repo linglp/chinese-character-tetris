@@ -19,7 +19,7 @@ type MoveShapeProps = {
   hasInitialized: boolean;
   setHasInitialized: (value: boolean | ((prev: boolean) => boolean)) => void;
   setFood: (value: {word: string, explanation: string}[] | ((prev: {word: string, explanation: string}[]) => {word: string, explanation: string}[])) => void;
-  words: any[];
+  words: string[];
   phrases: Record<string, string>;
 };
 
@@ -100,7 +100,7 @@ const MoveShape: React.FC<MoveShapeProps> = ({setShape, shape, setBoard, board, 
           }
 
           // restart a new shape
-          var newShape = randomShapeGenerator(words);
+          const newShape = randomShapeGenerator(words);
           setShape(newShape);
           setBorderCoordinate(saveBox(newShape));
           setShapeCoordinate(mapShapeToPositions(newShape))

@@ -10,7 +10,7 @@ type EndGameProp = {
   setScore: (value: number) => void;
   setIsDisabled: (value: boolean | ((prev: boolean) => boolean)) => void;
   setFood: (value: {word: string, explanation: string}[] | ((prev: {word: string, explanation: string}[]) => {word: string, explanation: string}[])) => void;
-  words: any[];
+  words: string[];
 }
 
 const EndGame: React.FC<EndGameProp> = ({ isDisabled, onUpdate, setEndGame, setBoard, setScore, setIsDisabled, words, setFood }) => {
